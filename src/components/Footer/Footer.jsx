@@ -19,7 +19,7 @@ const Footer = () => {
         px={[5, 12]}
         py={10}
         justify={"space-between"}
-        align={"center"}
+        align={["flex-start", "center"]}
         textAlign={"center"}
         gap={"1.5rem"}
       >

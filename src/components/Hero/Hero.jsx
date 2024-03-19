@@ -24,10 +24,11 @@ const Hero = () => {
       w={"100%"}
     >
       <Flex
-        align={"flex-end"}
+        align={"center"}
         justify={"space-between"}
         direction={{ base: "column", md: "row" }}
-        w={["90%", "65%"]}
+        w={["90%", "75%"]}
+        gap={10}
       >
         <Flex
           position={"relative"}
@@ -134,14 +135,13 @@ const Hero = () => {
             </Flex>
           </Flex>
         </Flex>
-        <Flex>
+        <Flex justify={"center"} align={"center"}>
           <Flex
-            w={"30rem"}
-            h={"35rem"}
+            w={["20rem", "30rem"]}
+            h={["25rem", "35rem"]}
             borderRadius={"15rem 15rem 0 0"}
             border={"8px solid rgba(255, 255, 255, 0.12)"}
             overflow={"hidden"}
-            flex={1}
             justify={"center"}
             align={"center"}
           >

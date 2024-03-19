@@ -4,6 +4,7 @@ const Companies = () => {
     <Flex
       w={"100%"}
       justify={"space-around"}
+      align={"center"}
       gap={"1rem"}
       p={"2rem"}
       flexDirection={["column", "row"]}
