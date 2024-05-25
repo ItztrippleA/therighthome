@@ -3,13 +3,13 @@ import {
   Flex,
   Text,
   Image,
-  Link,
   Button,
   Box,
   Heading,
   Circle,
   Input,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <Flex w={"100%"} justifyContent="center" alignItems="center">
@@ -50,7 +50,9 @@ const Footer = () => {
           >
             <Text cursor={"pointer"}>About us</Text>
             <Text cursor={"pointer"}>Privacy Policy</Text>
-            <Text cursor={"pointer"}>Terms and cnditions</Text>
+            <Link to={"/termsandcondition"}>
+              <Text cursor={"pointer"}>Terms and cnditions</Text>
+            </Link>
             <Text cursor={"pointer"}></Text>
           </Flex>
         </Flex>

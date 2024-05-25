@@ -1,34 +1,21 @@
-import { Flex, Text, Box } from "@chakra-ui/react";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import TermsandCondition from "./pages/TermsandCondition";
 import Header from "./components/Header/Header";
-import Hero from "./components/Hero/Hero";
-import Companies from "./components/Companies/Companies";
-import Residences from "./components/Residences/Residences";
-import Value from "./components/Value/Value";
-import Contact from "./components/Contact/Contact";
-import GetStarted from "./components/GetStarted/GetStarted";
 import Footer from "./components/Footer/Footer";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+
 function App() {
   return (
-    <Flex direction="column" flex={1} position={"relative"} overflow-x={"clip"}>
-      <>
-        <Box
-          position={"absolute"}
-          w={"20rem"}
-          h={"20rem"}
-          bg={"rgba(255,255,255,0.522)"}
-          filter={"blur(100px)"}
-        ></Box>
-
-        <Header />
-        <Hero />
-      </>
-      <Companies />
-      <Residences />
-      <Value />
-      <Contact />
-      <GetStarted />
+    <>
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/termsandcondition" element={<TermsandCondition />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+      </Routes>
       <Footer />
-    </Flex>
+    </>
   );
 }
 
