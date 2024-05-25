@@ -49,7 +49,9 @@ const Footer = () => {
             fontWeight={"500"}
           >
             <Text cursor={"pointer"}>About us</Text>
-            <Text cursor={"pointer"}>Privacy Policy</Text>
+            <Link to={"/privacypolicy"}>
+              <Text cursor={"pointer"}>Privacy Policy</Text>
+            </Link>
             <Link to={"/termsandcondition"}>
               <Text cursor={"pointer"}>Terms and cnditions</Text>
             </Link>
