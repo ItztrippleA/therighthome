@@ -11,15 +11,11 @@ const Header = () => {
       px={4}
       py={2}
       direction={"column"}
-      bg={"#131110"}
+      bg={"#000"}
       boxShadow="base"
     >
       <Flex justify="space-between" align="center" w={["90%", "75%"]}>
-        <Image
-          src="./WhatsApp Image 2024-02-19 at 4.49.03 PM.jpeg"
-          alt="logo"
-          h={"60px"}
-        />
+        <Image src="./hbLogo.jpeg" alt="logo" h={"60px"} />
         {!isMobile ? (
           <Flex gap={"2rem"} align={"center"} color={"white"}>
             <Link href="#">

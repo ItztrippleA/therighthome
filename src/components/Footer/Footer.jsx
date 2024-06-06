@@ -24,7 +24,7 @@ const Footer = () => {
         gap={"1.5rem"}
       >
         <Flex flexDir={"column"} alignItems={"flex-start"} gap={"1.5rem"}>
-          <Image src="./logo.png" alt="value" h={"60px"} />
+          <Image src="./hblogowh.jpeg" alt="value" h={"60px"} />
           <Text color={" rgb(140 139 139)"} fontSize={"0.9rem"}>
             Our vision is to make all people <br />
             the best place to live for them

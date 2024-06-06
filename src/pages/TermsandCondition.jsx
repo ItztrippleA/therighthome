@@ -64,26 +64,26 @@ function TermsandCondition() {
           <Text>
             These terms tell you the rules for using our App, site together with
             any related applications or platforms Who we are and how to contact
-            us HOMEBASKET APP is a property of COAK BASE NIGERIA LIMITED, a
-            Private Limited company registered under the laws of the Federal
-            Republic of Nigeria, having its registered office at No 3 Aburime
-            Street Isihor Benin City, Edo State, Nigeria THE HOMEBASKET LIMITED,
-            is a product of COAK BAZE NIGERIA LIMITED. Any reference to us, we,
-            our or the Group within these terms and conditions includes all or
-            any of the direct or indirect parent or subsidiary undertakings. You
-            can contact us here or view our Help Centre. By using our APP you
-            accept these terms By using our APP, you confirm that you accept
-            these terms of use (terms) and that you agree to comply with them.
-            If you do not agree to these terms, you must not use our APP. We
-            recommend that you print or make a digital copy of these terms for
-            future reference. There are other terms that may apply to you These
-            terms refer to the following additional terms, which also apply to
-            your use of our APP: Our Privacy Policy and Privacy Notices See
-            further how we may use your personal information. Our Acceptable Use
-            Policy, outlined below, which sets out the permitted and prohibited
-            uses of our APP. When using our APP, products and services, you must
-            comply with this Acceptable Use Policy. Our Cookie Policy, which
-            sets out information about the cookies on our APP.
+            us. HOMEBASKET App, site is a property of COAK BASE LIMITED, a
+            private limited company registered under the law of the United
+            Kingdom, having its office at 39a queens road, Hyde Park, Leeds. LS6
+            1NY. THE HOMEBASKET App site is a product of COAK BASE LIMITED. Any
+            reference to us, we, our, or the Group within these terms and
+            conditions includes all or any of the direct or indirect parent or
+            subsidiary undertakings. You can contact us here or view our Help
+            Centre. By using our APP, Site you accept these terms, you confirm
+            that you accept these terms of use (terms) and that you agree to
+            comply with them. If you do not agree to these terms, you must not
+            use our APP, site. We recommend that you print or make a digital
+            copy of these terms for future reference. There are other terms that
+            may apply to you These terms refer to the following additional
+            terms, which also apply to your use of our APP, site. Our Privacy
+            Policy and Privacy Notices See further how we may use your personal
+            information. Our Acceptable Use Policy, outlined below, which sets
+            out the permitted and prohibited uses of our APP site. When using
+            our APP, products and services, you must comply with this Acceptable
+            Use Policy. Our Cookie Policy, which sets out information about the
+            cookies on our APP , site.
           </Text>
           <Text>
             Some of our products and services may have specific terms or be
@@ -224,14 +224,14 @@ function TermsandCondition() {
           <Text mt={5}>
             You shall not conduct, facilitate, authorize or permit any text or
             data mining or web scraping in relation to our APP or any product or
-            services provided via, or in relation to, our MOBILEAPP. This
+            services provided via, or in relation to, our MOBILE APP. This
             includes but is not limited to using (or permitting, authorizing or
             attempting the use of):
           </Text>
           <Text mt={5}>
             Any "robot", "bot", "spider", "scraper" or other automated device,
             program, tool, algorithm, code, process or methodology to access,
-            obtain, copy, monitor or republish any portion of the MOBILEAPP or
+            obtain, copy, monitor or republish any portion of the MOBILE APP or
             any data, content, information or services accessed via the same.
           </Text>
           <Text mt={5}>
