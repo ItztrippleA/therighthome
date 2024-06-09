@@ -39,7 +39,7 @@ const Footer = () => {
             fontSize={"0.9rem"}
             textAlign={"left"}
           >
-            145 Zone 7, Abuja Nigeria <br />
+            39A QUEENS ROAD, HYDE PARK,LEEDS. 156 INY. <br />
             the best place to live for them
           </Text>
           <Flex
