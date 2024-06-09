@@ -39,7 +39,7 @@ const Footer = () => {
             fontSize={"0.9rem"}
             textAlign={"left"}
           >
-            39A QUEENS ROAD, HYDE PARK,LEEDS. 156 INY. <br />
+            39A QUEENS ROAD, HYDE PARK,LEEDS. LS6 1NY. <br />
             the best place to live for them
           </Text>
           <Flex
