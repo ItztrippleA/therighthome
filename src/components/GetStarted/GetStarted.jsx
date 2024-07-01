@@ -31,7 +31,7 @@ const GetStarted = () => {
           fontSize={{ base: "1.5rem", md: "2rem" }}
           fontWeight="bold"
         >
-          Get Started with The Right Home
+          Get Started with The Home Basket
         </Text>
 
         <Text color={"rgba(255, 255, 255, 0.78)"} fontSize={"0.9rem"}>
