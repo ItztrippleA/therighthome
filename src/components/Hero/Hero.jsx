@@ -18,8 +18,10 @@ import {
 } from "@chakra-ui/react";
 import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
+import { useNavigate } from "react-router-dom";
 const Hero = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
+  const navigate = useNavigate();
   const [query, setQuery] = useState({
     type: "sale",
     location: "",
@@ -175,6 +177,7 @@ const Hero = () => {
                 flex={1}
                 p={[3, ""]}
                 w={["100%", ""]}
+                onClick={() => navigate("/list")}
               >
                 Search
               </Button>
