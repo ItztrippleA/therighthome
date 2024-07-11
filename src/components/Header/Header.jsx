@@ -2,8 +2,10 @@ import React from "react";
 import { Flex, Text, Image, Link, Button } from "@chakra-ui/react";
 import { BiMenuAltRight } from "react-icons/bi";
 import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
   const isMobile = useMediaQuery({ query: `(max-width: 768px)` });
+  const navigate = useNavigate();
   return (
     <Flex
       w={"100%"}
@@ -15,10 +17,16 @@ const Header = () => {
       boxShadow="base"
     >
       <Flex justify="space-between" align="center" w={["90%", "75%"]}>
-        <Image src="./hbLogo.jpeg" alt="logo" h={"60px"} />
+        <Image
+          src="./hbLogo.jpeg"
+          alt="logo"
+          h={"60px"}
+          onClick={() => navigate("/")}
+          cursor={"pointer"}
+        />
         {!isMobile ? (
           <Flex gap={"2rem"} align={"center"} color={"white"}>
-            <Link href="#">
+            <Link href="/list">
               <Text fontSize="md">Residences</Text>
             </Link>
             <Link href="#">

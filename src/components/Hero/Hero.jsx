@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Text,
@@ -9,10 +9,27 @@ import {
   Heading,
   Circle,
   Input,
+  useMediaQuery,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
 const Hero = () => {
+  const [isDesktop] = useMediaQuery("(min-width: 1050px)");
+  const [query, setQuery] = useState({
+    type: "sale",
+    location: "",
+    minPrice: 0,
+    maxPrice: 0,
+  });
+
+  const switchType = (value) => {
+    setQuery((prev) => ({ ...prev, type: value }));
+  };
   return (
     <Flex
       color={"white"}
@@ -64,28 +81,107 @@ const Hero = () => {
             </Text>
           </Box>
 
-          <Flex
-            bg={"#fff"}
-            borderRadius={"5px"}
-            border={"3px solid #1f3e72"}
-            p={"0.5rem 1rem"}
-            justify={"space-between"}
-            align={"center"}
-            gap={3}
-            w={"100%"}
-          >
-            <HiLocationMarker color="#1f3e72" size={35} />
-            <Input
-              type="text"
-              placeholder="Search by location"
-              border={"none"}
-              outline={"none"}
-              color={"black"}
-            />
-            <Button variant="outline">Search</Button>
+          <Flex flexDir={"column"}>
+            <Flex>
+              <Button
+                colorScheme="orange"
+                variant={query.type == "sale" ? "solid" : "outline"}
+                size={"lg"}
+                onClick={() => switchType("sale")}
+              >
+                Buy
+              </Button>
+              <Button
+                colorScheme="orange"
+                variant={query.type == "rent" ? "solid" : "outline"}
+                size={"lg"}
+                onClick={() => switchType("rent")}
+              >
+                Rent
+              </Button>
+            </Flex>
+            <Flex
+              bg={"#fff"}
+              borderRadius={"5px"}
+              border={"3px solid #1f3e72"}
+              p={"0.5rem 1rem"}
+              justify={"space-between"}
+              align={"center"}
+              flexDir={["column", "row"]}
+              gap={3}
+              w={"100%"}
+              flex={1}
+            >
+              <Flex align={"center"}>
+                {isDesktop && (
+                  <HiLocationMarker color="#1f3e72" size={25} flex={1} />
+                )}
+                <Input
+                  type="text"
+                  placeholder="Search by location"
+                  border={"none"}
+                  outline={"none"}
+                  color={"black"}
+                  flex={3}
+                />
+                {/* <Input
+                  type="number"
+                  placeholder="min Price"
+                  border={"none"}
+                  outline={"none"}
+                  color={"black"}
+                  flex={2}
+                  min={0}
+                  max={1000000}
+                /> */}
+                <NumberInput
+                  maxW={32}
+                  // defaultValue={15}
+                  min={10}
+                  color={"black"}
+                >
+                  <NumberInputField
+                    placeholder="min price"
+                    flex={1}
+                    name="minPrice"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+                <NumberInput
+                  maxW={32}
+                  // defaultValue={15}
+                  min={10}
+                  color={"black"}
+                >
+                  <NumberInputField
+                    placeholder="max price"
+                    flex={1}
+                    name="maxPrice"
+                  />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Flex>
+
+              <Button
+                colorScheme="orange"
+                variant="solid"
+                size={"lg"}
+                flex={1}
+                p={[3, ""]}
+                w={["100%", ""]}
+              >
+                Search
+              </Button>
+            </Flex>
           </Flex>
 
-          <Flex justify={"space-between"} w={"100%"}>
+          <Flex justify={"space-between"} w={["100%", "70%"]}>
             <Flex align={"center"} flexDirection={"column"}>
               <Flex align={"center"}>
                 <CountUp
