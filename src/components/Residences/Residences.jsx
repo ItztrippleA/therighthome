@@ -1,9 +1,11 @@
 import { Flex, Text, Image, Button, Box } from "@chakra-ui/react";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import "swiper/css";
-import data from "../../utils/slider.json";
+// import data from "../../utils/slider.json";
+import { listData } from "../../lib/dummydata";
 
 const Residences = () => {
+  const data = listData;
   const SliderButtons = () => {
     const swiper = useSwiper();
     return (
@@ -57,27 +59,30 @@ const Residences = () => {
                   flexDirection={"column"}
                   gap={"0.6rem"}
                   borderRadius={"10px"}
-                  maxW={"max-content"}
+                  // maxW={"max-content"}
                   margin={"auto"}
                   p={"1rem"}
                   transition={"all 300ms ease-in"}
                   className="r-card"
                 >
                   <Image
-                    src={card.image}
+                    src={card.img}
                     alt="home"
                     w={"100%"}
-                    maxW={"15rem"}
+                    // maxW={"15rem"}
+                    h={"150px"}
                   />
                   <Flex fontSize={"1.2rem"} fontWeight={"600"}>
                     <Text color={"orange"}>$</Text>
                     <Text>{card.price}</Text>
                   </Flex>
                   <Text className="primaryText" fontSize={"1.2rem"}>
-                    {card.name}
+                    {card.title.length > 15
+                      ? `${card.title.slice(0, 15)}...`
+                      : card.title}
                   </Text>
                   <Text className="secondaryText" fontSize={"0.7rem"}>
-                    {card.detail}
+                    {card.address}
                   </Text>
                 </Flex>
               </SwiperSlide>
