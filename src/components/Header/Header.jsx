@@ -1,11 +1,13 @@
-import React from "react";
-import { Flex, Text, Image, Link, Button } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { Flex, Text, Image, Link, Button, Avatar } from "@chakra-ui/react";
 import { BiMenuAltRight } from "react-icons/bi";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 const Header = () => {
   const isMobile = useMediaQuery({ query: `(max-width: 768px)` });
   const navigate = useNavigate();
+  const { user, onOpen, onOpenReg } = useContext(AuthContext);
   return (
     <Flex
       w={"100%"}
@@ -32,19 +34,38 @@ const Header = () => {
             <Link href="#">
               <Text fontSize="md">Our Values</Text>
             </Link>
-            <Link href="#">
-              <Text fontSize="md">Contact Us</Text>
+            <Link href="#" onClick={onOpen}>
+              {user ? (
+                <Avatar
+                  name={`${user.firstname} ${user.lastname}`}
+                  src={user.avatar}
+                />
+              ) : (
+                <Text fontSize="md">Sign in</Text>
+              )}
             </Link>
-            <Link href="#">
+            {user ? (
+              <Link href="/profile">
+                <Button
+                  bg="#1A3D5B"
+                  color="white"
+                  _hover={{ bg: "#F6874F" }}
+                  cursor={"pointer"}
+                >
+                  <Text fontSize="md">Profile </Text>
+                </Button>
+              </Link>
+            ) : (
               <Button
                 bg="#1A3D5B"
                 color="white"
                 _hover={{ bg: "#F6874F" }}
                 cursor={"pointer"}
+                onClick={onOpenReg}
               >
-                <Text fontSize="md">Contact </Text>
+                <Text fontSize="md">Sign Up </Text>
               </Button>
-            </Link>
+            )}
           </Flex>
         ) : (
           <Flex className="menu-icon">

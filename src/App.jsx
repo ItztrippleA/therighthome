@@ -7,6 +7,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ListPage from "./pages/ListPage";
 import SinglePage from "./pages/SinglePage";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/list" element={<ListPage />} />
         <Route path="/:id" element={<SinglePage />} />
         <Route path="/termsandcondition" element={<TermsandCondition />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
       </Routes>
       <Footer />

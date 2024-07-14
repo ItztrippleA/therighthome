@@ -8,12 +8,12 @@ import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <ChakraProvider>
+    <ChakraProvider>
+      <AuthProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </ChakraProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ChakraProvider>
   </React.StrictMode>
 );
