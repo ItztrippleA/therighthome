@@ -21,6 +21,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Card = ({ item }) => {
   const navigate = useNavigate();
+  console.log(item);
   return (
     <Flex
       p={3}
@@ -31,7 +32,7 @@ const Card = ({ item }) => {
       onClick={() => navigate(`/${item.id}`)}
     >
       <Flex flex={1}>
-        <Image src={item.images[0]} alt="image" w={"100%"} borderRadius={15} />
+        <Image src={item?.images[0]} alt="image" w={"100%"} borderRadius={15} />
       </Flex>
       <Flex flexDir={"column"} flex={2} justify={"space-between"}>
         <Heading size={["sm", "md"]}>

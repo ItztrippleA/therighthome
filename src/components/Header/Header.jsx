@@ -34,7 +34,7 @@ const Header = () => {
             <Link href="#">
               <Text fontSize="md">Our Values</Text>
             </Link>
-            <Link href="#" onClick={onOpen}>
+            <Link onClick={onOpen}>
               {user ? (
                 <Avatar
                   name={`${user.firstname} ${user.lastname}`}
