@@ -15,10 +15,12 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  IconButton,
 } from "@chakra-ui/react";
 import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
+import { SearchIcon } from "@chakra-ui/icons";
 const Hero = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const navigate = useNavigate();
@@ -54,6 +56,8 @@ const Hero = () => {
           zIndex={5}
           flexDirection={"column"}
           gap={10}
+          // bgColor={"red"}
+          // w={["50%",]}
         >
           <Heading
             as={"h1"}
@@ -114,30 +118,39 @@ const Hero = () => {
               w={"100%"}
               flex={1}
             >
-              <Flex align={"center"}>
+              <Flex align={"center"} flexDir={["column", "row"]}>
                 {isDesktop && (
                   <HiLocationMarker color="#1f3e72" size={25} flex={1} />
                 )}
                 <Input
                   type="text"
-                  placeholder="Search by location"
+                  placeholder="Search by city"
                   border={"none"}
                   outline={"none"}
                   color={"black"}
                   flex={3}
+                  p={5}
+                  w={"100%"}
+                  onChange={(e) =>
+                    setQuery((prev) => ({ ...prev, location: e.target.value }))
+                  }
                 />
-                {/* <Input
-                  type="number"
-                  placeholder="min Price"
+                <Input
+                  type="text"
+                  placeholder="Search by Country"
                   border={"none"}
                   outline={"none"}
                   color={"black"}
-                  flex={2}
-                  min={0}
-                  max={1000000}
-                /> */}
+                  flex={3}
+                  p={5}
+                  w={"100%"}
+                  onChange={(e) =>
+                    setQuery((prev) => ({ ...prev, location: e.target.value }))
+                  }
+                />
+
                 <NumberInput
-                  maxW={32}
+                  maxW={[32]}
                   // defaultValue={15}
                   min={10}
                   color={"black"}
@@ -170,17 +183,13 @@ const Hero = () => {
                 </NumberInput>
               </Flex>
 
-              <Button
+              <IconButton
                 colorScheme="orange"
-                variant="solid"
-                size={"lg"}
-                flex={1}
-                p={[3, ""]}
-                w={["100%", ""]}
+                aria-label="Search"
+                size="lg"
                 onClick={() => navigate("/list")}
-              >
-                Search
-              </Button>
+                icon={<SearchIcon />}
+              />
             </Flex>
           </Flex>
 

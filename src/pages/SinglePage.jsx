@@ -13,14 +13,17 @@ import { singlePostData, userData } from "../lib/dummydata";
 import { BiDollar, BiLocationPlus } from "react-icons/bi";
 import Slider from "../components/Slider/Slider";
 import Map from "../components/Map/Map";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const SinglePage = () => {
   const facilities = singlePostData.postDetail.facilities;
   const mid = Math.ceil(facilities.length / 2);
   const firstHalf = facilities.slice(0, mid);
   const secondHalf = facilities.slice(mid);
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { id } = useParams();
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
+  console.log(id);
   return (
     <Flex
       // position={"relative"}

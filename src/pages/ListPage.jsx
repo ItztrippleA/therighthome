@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { listData } from "../lib/dummydata";
 import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import Filter from "../components/filter/Filter";
 import Card from "../components/Card/Card";
 import Map from "../components/Map/Map";
+import { AuthContext } from "../context/AuthContext";
 
 const ListPage = () => {
   const data = listData;
+  const { fetchPosts, posts } = useContext(AuthContext);
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   return (
     <Flex
       justify={"center"}
@@ -25,7 +30,7 @@ const ListPage = () => {
         <Box flex={3}>
           <Filter />
           <Flex gap={5} flexDir={"column"} mt={10}>
-            {data.map((item) => (
+            {posts.map((item) => (
               <Card key={item.id} item={item} />
             ))}
           </Flex>

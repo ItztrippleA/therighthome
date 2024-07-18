@@ -154,3 +154,174 @@ export const userData = {
   name: "John Doe",
   img: "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
 };
+
+export const proptypes = {
+  sell: [
+    {
+      image: "/assets/images/newbuilding.png",
+      title: "New Building for Sale",
+      tag: "building",
+    },
+    {
+      image: "/assets/images/ApartmentFOrSale.png",
+      title: "Apartment for Sale",
+      tag: "apartment",
+    },
+    {
+      image: "/assets/images/commForSale.png",
+      title: "Commercial Property for Sale",
+      tag: "commercial",
+    },
+    {
+      image: "/assets/images/houseforsale.png",
+      title: "House for Sale",
+      tag: "house",
+    },
+    {
+      image: "/assets/images/plotsforsale.png",
+      title: "Plots and Land for Sale",
+      tag: "land",
+    },
+  ],
+
+  rent: [
+    {
+      image: "/assets/images/newbuilding.png",
+      title: "New Building for Rent",
+      tag: "building",
+    },
+
+    {
+      image: "/assets/images/ApartmentFOrSale.png",
+      title: "Apartment for Rent",
+      tag: "apartment",
+    },
+    {
+      image: "/assets/images/commForSale.png",
+      title: "Commercial Property for Rent",
+      tag: "commercial",
+    },
+    {
+      image: "/assets/images/houseforsale.png",
+      title: "House for Rent",
+      tag: "building",
+    },
+    {
+      image: "/assets/images/plotsforsale.png",
+      title: "Short Let ",
+      tag: "shortlet",
+    },
+  ],
+
+  shared: [
+    {
+      image: "/assets/images/newbuilding.png",
+      title: "Hostel Accomodation",
+      tag: "hotel",
+    },
+    {
+      image: "/assets/images/houseforsale.png",
+      title: "Personal/private accommodation",
+      tag: "apartment",
+    },
+  ],
+
+  distress: [
+    {
+      image: "/assets/images/newbuilding.png",
+      title: "New Building for Sale (Distress)",
+      tag: "building",
+    },
+
+    {
+      image: "/assets/images/ApartmentFOrSale.png",
+      title: "Apartment for Sale  (Distress)",
+      tag: "apartment",
+    },
+
+    {
+      image: "/assets/images/commForSale.png",
+      title: "Commercial Property for Sale  (Distress)",
+      tag: "commercial",
+    },
+
+    {
+      image: "/assets/images/houseforsale.png",
+      title: "House for Sale  (Distress)",
+      tag: "house",
+    },
+
+    {
+      image: "/assets/images/plotsforsale.png",
+      title: "Plots and Land for Sale  (Distress)",
+      tag: "land",
+    },
+
+    {
+      image: "/assets/images/ApartmentFOrSale.png",
+      title: "Short let property for Sale  (Distress)",
+      tag: "shortlet",
+    },
+  ],
+
+  hotel: [
+    {
+      title: "Hotel",
+      image: "/assets/images/newbuilding.png",
+      tag: "hotel",
+    },
+  ],
+};
+
+export const facilities = [
+  "24-hour Electricity",
+  "Air Conditioning",
+  "En Suite",
+  "Microwave",
+  "Pre-paid meter",
+  "Post-paid meter",
+  "Refrigerator",
+  "Sectionals",
+  "Television",
+  "Wi-Fi",
+  "BBQ Zone",
+  "Elevator",
+  "Gym",
+  "Office Space",
+  "Swimming Pool",
+  "Balcony",
+  "Dining Area",
+  "Water Heater",
+  "Kichen Shelf",
+  "Wardrobe",
+  "Chandelier",
+  "Dishwasher",
+  "Kitchen Cabinet",
+  "Pop ceiling",
+  "Tiled Floor",
+  "Others",
+  "None",
+];
+
+export const filter = [
+  {
+    id: "1",
+    title: "Property Type",
+  },
+  {
+    id: "2",
+    title: "Price",
+  },
+  {
+    id: "3",
+    title: "Beds & Baths",
+  },
+  {
+    id: "4",
+    title: "Condition",
+  },
+  {
+    id: "5",
+    title: "Facilities",
+  },
+];

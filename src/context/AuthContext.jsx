@@ -112,12 +112,14 @@ export const AuthProvider = ({ children }) => {
       "Content-Type": "application/json",
     };
 
-    if (user.token) {
+    if (user?.token) {
       headers["Authorization"] = `Bearer ${user.token}`;
     }
 
     fetch(
-      `${BASE_URL}/api/posts?type=${type}&city=${city}&country=${country}&minPrice=&maxPrice=&property=`,
+      `${BASE_URL}/api/posts?type=${type}&city=${
+        city.charAt(0).toUpperCase() + city.slice(1)
+      }&country=${country}&minPrice=&maxPrice=&property=`,
       {
         method: "GET",
         headers: headers,
@@ -268,7 +270,6 @@ export const AuthProvider = ({ children }) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setLoading(false);
-        console.log("Register", responseJson);
 
         if (responseJson.success) {
           localStorage.setItem("user", JSON.stringify(responseJson.user));

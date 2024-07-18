@@ -31,7 +31,7 @@ const Card = ({ item }) => {
       onClick={() => navigate(`/${item.id}`)}
     >
       <Flex flex={1}>
-        <Image src={item.img} alt="image" w={"100%"} borderRadius={15} />
+        <Image src={item.images[0]} alt="image" w={"100%"} borderRadius={15} />
       </Flex>
       <Flex flexDir={"column"} flex={2} justify={"space-between"}>
         <Heading size={["sm", "md"]}>
@@ -68,7 +68,7 @@ const Card = ({ item }) => {
             </Tag>
             <Tag size={"md"} variant="subtle" colorScheme="cyan">
               <TagLeftIcon boxSize="12px" as={BiFullscreen} />
-              <TagLabel>245 sqr</TagLabel>
+              <TagLabel>{item.size}</TagLabel>
             </Tag>
           </Flex>
           <Flex gap={5}>
