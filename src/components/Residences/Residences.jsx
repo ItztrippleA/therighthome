@@ -66,7 +66,7 @@ const Residences = () => {
                   className="r-card"
                 >
                   <Image
-                    src={card.img}
+                    src={card.images[0]}
                     alt="home"
                     w={"100%"}
                     // maxW={"15rem"}
