@@ -3,9 +3,23 @@ import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import "swiper/css";
 // import data from "../../utils/slider.json";
 import { listData } from "../../lib/dummydata";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext, useEffect } from "react";
 
 const Residences = () => {
   const data = listData;
+  const { posts, fetchPosts } = useContext(AuthContext);
+  useEffect(() => {
+    const initialQuery = {
+      type: "",
+      city: "",
+      country: "",
+      minPrice: 0,
+      maxPrice: 0,
+      property: "",
+    };
+    fetchPosts(initialQuery);
+  }, []);
   const SliderButtons = () => {
     const swiper = useSwiper();
     return (
@@ -53,7 +67,7 @@ const Residences = () => {
             }}
           >
             <SliderButtons />
-            {data.map((card, i) => (
+            {posts.slice(0, 5).map((card, i) => (
               <SwiperSlide key={i}>
                 <Flex
                   flexDirection={"column"}

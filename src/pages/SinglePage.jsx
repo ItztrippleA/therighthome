@@ -8,22 +8,29 @@ import {
   Text,
   useMediaQuery,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { singlePostData, userData } from "../lib/dummydata";
 import { BiDollar, BiLocationPlus } from "react-icons/bi";
 import Slider from "../components/Slider/Slider";
 import Map from "../components/Map/Map";
 import { useParams, useSearchParams } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const SinglePage = () => {
-  const facilities = singlePostData.postDetail.facilities;
-  const mid = Math.ceil(facilities.length / 2);
-  const firstHalf = facilities.slice(0, mid);
-  const secondHalf = facilities.slice(mid);
-  const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
+  const { fetchPost, post, setPost } = useContext(AuthContext);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
-  console.log(id);
+
+  useEffect(() => {
+    fetchPost(id);
+    console.log(post);
+  }, []);
+  const facilities = post?.postDetail?.facilities;
+  const mid = Math.ceil(facilities?.length / 2);
+  const firstHalf = facilities?.slice(0, mid);
+  const secondHalf = facilities?.slice(mid);
+
   return (
     <Flex
       // position={"relative"}
@@ -40,14 +47,14 @@ const SinglePage = () => {
         alignSelf={"center"}
       >
         <Flex flex={3} p={5} flexDir={"column"} gap={10}>
-          <Slider images={singlePostData.images} />
+          <Slider images={post.images} />
           <Flex justify={"space-between"}>
             <Flex flexDir={"column"} gap={5}>
-              <Heading>{singlePostData.title}</Heading>
+              <Heading>{post.title}</Heading>
               <Flex gap={2} align={"center"}>
                 <BiLocationPlus />
                 <Text color={"#888"} fontSize={["15px", "18px"]}>
-                  {singlePostData.address}
+                  {post.address}
                 </Text>
               </Flex>
               <Flex align={"center"}>
@@ -58,7 +65,7 @@ const SinglePage = () => {
                   align={"center"}
                 >
                   <TagLeftIcon boxSize="20px" as={BiDollar} />
-                  <TagLabel>{singlePostData.price}</TagLabel>
+                  <TagLabel>{post.price}</TagLabel>
                 </Tag>
               </Flex>
             </Flex>
@@ -83,7 +90,7 @@ const SinglePage = () => {
               </Text>
             </Flex> */}
           </Flex>
-          <Text>{singlePostData.description}</Text>
+          <Text>{post.description}</Text>
         </Flex>
         <Flex flex={2} p={5} flexDir={"column"} bgColor={"#feebc8"} gap={10}>
           <Heading size={"md"}>General</Heading>
@@ -103,20 +110,20 @@ const SinglePage = () => {
                     <Text color={"#999"} fontSize={"14"}>
                       Furnishing:
                     </Text>
-                    <Text color={"#000"}>{singlePostData.furnishing}</Text>
+                    <Text color={"#000"}>{post.furnishing}</Text>
                   </Flex>
                   <Flex align={"center"} gap={1}>
                     <Text color={"#999"} fontSize={"14"}>
                       Property Size:
                     </Text>
-                    <Text color={"#000"}>{singlePostData.size}</Text>
+                    <Text color={"#000"}>{post.size}</Text>
                   </Flex>
                   <Flex align={"center"} gap={1}>
                     <Text color={"#999"} fontSize={"14"}>
                       Service Charge:
                     </Text>
                     <Text color={"#000"}>
-                      {singlePostData.postDetail.charge ? "Yes" : "No"}
+                      {post?.postDetail?.charge ? "Yes" : "No"}
                     </Text>
                   </Flex>
                 </Flex>
@@ -125,19 +132,19 @@ const SinglePage = () => {
                     <Text color={"#999"} fontSize={"14"}>
                       Condition:
                     </Text>
-                    <Text color={"#000"}>{singlePostData.condition}</Text>
+                    <Text color={"#000"}>{post.condition}</Text>
                   </Flex>
                   <Flex align={"center"} gap={1}>
                     <Text color={"#999"} fontSize={"14"}>
                       Parking Space::
                     </Text>
-                    <Text color={"#000"}>{singlePostData.parking}</Text>
+                    <Text color={"#000"}>{post.parking}</Text>
                   </Flex>
                   <Flex align={"center"} gap={1}>
                     <Text color={"#999"} fontSize={"14"}>
                       Listed By:
                     </Text>
-                    <Text color={"#000"}>{singlePostData.listedBy}</Text>
+                    <Text color={"#000"}>{post.listedBy}</Text>
                   </Flex>
                 </Flex>
               </Flex>
@@ -152,14 +159,14 @@ const SinglePage = () => {
               <Heading size={"md"}>Facilities</Heading>
               <Flex>
                 <Flex gap={1} flex={1} flexDir={"column"}>
-                  {firstHalf.map((item, i) => (
+                  {firstHalf?.map((item, i) => (
                     <Text color={"#999"} fontSize={"14"} key={i}>
                       {item}
                     </Text>
                   ))}
                 </Flex>
                 <Flex gap={1} flex={1} flexDir={"column"}>
-                  {secondHalf.map((item, i) => (
+                  {secondHalf?.map((item, i) => (
                     <Text color={"#999"} fontSize={"14"} key={i}>
                       {item}
                     </Text>
@@ -180,17 +187,17 @@ const SinglePage = () => {
                   <Text color={"#999"} fontSize={"14"}>
                     Name:
                   </Text>
-                  <Text color={"#000"}>{singlePostData.name}</Text>
+                  <Text color={"#000"}>{post.name}</Text>
                 </Flex>
                 <Flex align={"center"} gap={1}>
                   <Text color={"#999"} fontSize={"14"}>
                     Phone Number:
                   </Text>
-                  <Text color={"#000"}>{singlePostData.phoneNumber}</Text>
+                  <Text color={"#000"}>{post.phoneNumber}</Text>
                 </Flex>
               </Flex>
             </Flex>
-            <Flex
+            {/* <Flex
               flexDir={"column"}
               gap={5}
               // bgColor={"#fff"}
@@ -199,8 +206,8 @@ const SinglePage = () => {
               h={300}
             >
               <Heading size={"md"}>Location</Heading>
-              <Map data={[singlePostData]} />
-            </Flex>
+              <Map data={[post]} />
+            </Flex> */}
           </Flex>
         </Flex>
       </Flex>

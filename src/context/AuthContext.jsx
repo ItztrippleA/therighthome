@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
 
@@ -103,10 +104,18 @@ export const AuthProvider = ({ children }) => {
     },
   });
 
-  const fetchPosts = async (type = "", city = "", country = "") => {
+  const fetchPosts = async (query) => {
     setLoading(true);
     setRefreshing(true);
-    console.log(type, city, country);
+    const {
+      type = "",
+      city = "",
+      country = "",
+      minPrice = 0,
+      maxPrice = 0,
+      property = "",
+    } = query;
+    console.log({ type, city, country, minPrice, maxPrice, property });
 
     const headers = {
       "Content-Type": "application/json",
@@ -117,9 +126,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     fetch(
-      `${BASE_URL}/api/posts?type=${type}&city=${
-        city.charAt(0).toUpperCase() + city.slice(1)
-      }&country=${country}&minPrice=&maxPrice=&property=`,
+      `${BASE_URL}/api/posts?type=${type}&city=${city}&country=${country}&minPrice=${minPrice}&maxPrice=${maxPrice}&property=${property}`,
       {
         method: "GET",
         headers: headers,
@@ -144,6 +151,43 @@ export const AuthProvider = ({ children }) => {
         setRefreshing(false);
       });
   };
+
+  const fetchPost = async (id) => {
+    setLoading(true);
+    setRefreshing(true);
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    if (user?.token) {
+      headers["Authorization"] = `Bearer ${user.token}`;
+    }
+
+    fetch(`${BASE_URL}/api/posts/${id}`, {
+      method: "GET",
+      // headers: headers,
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        if (responseJson.success) {
+          setPost(responseJson.data);
+          setLoading(false);
+          setRefreshing(false);
+        } else {
+          alert(responseJson.message);
+          setLoading(false);
+          setRefreshing(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        setRefreshing(false);
+      });
+  };
+
   const signIn = () => {
     // if (!validateInputs()) {
     //   return;
@@ -311,6 +355,9 @@ export const AuthProvider = ({ children }) => {
         setCountry,
         onOpen,
         onOpenReg,
+        fetchPost,
+        post,
+        setPost,
       }}
     >
       <Modal

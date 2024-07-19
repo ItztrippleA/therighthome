@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Flex,
   Text,
   Image,
-  Link,
   Button,
   Box,
   Heading,
@@ -21,23 +20,69 @@ import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
 import { SearchIcon } from "@chakra-ui/icons";
+import { BASE_URL } from "../../Environment";
+import { AuthContext } from "../../context/AuthContext";
+
 const Hero = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const navigate = useNavigate();
   const [query, setQuery] = useState({
-    type: "sale",
-    location: "",
+    type: "",
+    country: "",
+    city: "",
     minPrice: 0,
     maxPrice: 0,
   });
+  const { user, posts, setPosts, setLoading, setRefreshing } =
+    useContext(AuthContext);
+
+  const fetchPosts = async () => {
+    setLoading(true);
+    setRefreshing(true);
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    if (user?.token) {
+      headers["Authorization"] = `Bearer ${user.token}`;
+    }
+
+    fetch(
+      `${BASE_URL}/api/posts?type=${query.type}&city=${
+        query.city.charAt(0).toUpperCase() + query.city.slice(1)
+      }&country=${query.country}&minPrice=${query.minPrice}&maxPrice=${
+        query.maxPrice
+      }&property=`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.success) {
+          setPosts(responseJson.data);
+        } else {
+          alert(responseJson.message);
+        }
+        setLoading(false);
+        setRefreshing(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        setRefreshing(false);
+      });
+  };
 
   const switchType = (value) => {
     setQuery((prev) => ({ ...prev, type: value }));
   };
+
   return (
     <Flex
       color={"white"}
-      // position={"relative"}
       justify={"center"}
       pb={["1rem", "3rem"]}
       pt={["3rem", "0rem"]}
@@ -56,8 +101,6 @@ const Hero = () => {
           zIndex={5}
           flexDirection={"column"}
           gap={10}
-          // bgColor={"red"}
-          // w={["50%",]}
         >
           <Heading
             as={"h1"}
@@ -83,7 +126,7 @@ const Hero = () => {
               Find a variety of property that suits you very easily{" "}
             </Text>
             <Text fontSize={".9rem"} color={"rgba(140 139 139)"}>
-              forget all dificulties in finding a residence for you
+              Forget all difficulties in finding a residence for you
             </Text>
           </Box>
 
@@ -91,7 +134,7 @@ const Hero = () => {
             <Flex>
               <Button
                 colorScheme="orange"
-                variant={query.type == "sale" ? "solid" : "outline"}
+                variant={query.type === "sale" ? "solid" : "outline"}
                 size={"lg"}
                 onClick={() => switchType("sale")}
               >
@@ -99,11 +142,19 @@ const Hero = () => {
               </Button>
               <Button
                 colorScheme="orange"
-                variant={query.type == "rent" ? "solid" : "outline"}
+                variant={query.type === "rent" ? "solid" : "outline"}
                 size={"lg"}
                 onClick={() => switchType("rent")}
               >
                 Rent
+              </Button>
+              <Button
+                colorScheme="orange"
+                variant={query.type === "shared" ? "solid" : "outline"}
+                size={"lg"}
+                onClick={() => switchType("shared")}
+              >
+                Shared
               </Button>
             </Flex>
             <Flex
@@ -132,12 +183,12 @@ const Hero = () => {
                   p={5}
                   w={"100%"}
                   onChange={(e) =>
-                    setQuery((prev) => ({ ...prev, location: e.target.value }))
+                    setQuery((prev) => ({ ...prev, city: e.target.value }))
                   }
                 />
                 <Input
                   type="text"
-                  placeholder="Search by Country"
+                  placeholder="Search by country"
                   border={"none"}
                   outline={"none"}
                   color={"black"}
@@ -145,18 +196,20 @@ const Hero = () => {
                   p={5}
                   w={"100%"}
                   onChange={(e) =>
-                    setQuery((prev) => ({ ...prev, location: e.target.value }))
+                    setQuery((prev) => ({ ...prev, country: e.target.value }))
                   }
                 />
 
                 <NumberInput
                   maxW={[32]}
-                  // defaultValue={15}
-                  min={10}
+                  min={0}
                   color={"black"}
+                  onChange={(value) =>
+                    setQuery((prev) => ({ ...prev, minPrice: value }))
+                  }
                 >
                   <NumberInputField
-                    placeholder="min price"
+                    placeholder="Min price"
                     flex={1}
                     name="minPrice"
                   />
@@ -167,12 +220,14 @@ const Hero = () => {
                 </NumberInput>
                 <NumberInput
                   maxW={32}
-                  // defaultValue={15}
-                  min={10}
+                  min={0}
                   color={"black"}
+                  onChange={(value) =>
+                    setQuery((prev) => ({ ...prev, maxPrice: value }))
+                  }
                 >
                   <NumberInputField
-                    placeholder="max price"
+                    placeholder="Max price"
                     flex={1}
                     name="maxPrice"
                   />
@@ -187,7 +242,11 @@ const Hero = () => {
                 colorScheme="orange"
                 aria-label="Search"
                 size="lg"
-                onClick={() => navigate("/list")}
+                onClick={() => {
+                  const queryParams = new URLSearchParams(query).toString();
+                  navigate(`/list?${queryParams}`);
+                  fetchPosts();
+                }}
                 icon={<SearchIcon />}
               />
             </Flex>

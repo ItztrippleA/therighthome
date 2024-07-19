@@ -21,7 +21,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Card = ({ item }) => {
   const navigate = useNavigate();
-  console.log(item);
+  // console.log(item);
   return (
     <Flex
       p={3}

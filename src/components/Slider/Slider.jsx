@@ -4,7 +4,7 @@ import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 
 const Slider = ({ images }) => {
   const [imageIndex, setImageIndex] = useState(null);
-
+  console.log(images);
   const changeSlide = (direction) => {
     if (direction === "left") {
       if (imageIndex === 0) {
@@ -66,16 +66,18 @@ const Slider = ({ images }) => {
         </Flex>
       )}
       <Flex flex={3}>
-        <Image
-          src={images[0]}
-          alt=""
-          borderRadius={"10px"}
-          objectFit={"cover"}
-          onClick={() => setImageIndex(0)}
-        />
+        {images && (
+          <Image
+            src={images[0]}
+            alt=""
+            borderRadius={"10px"}
+            objectFit={"cover"}
+            onClick={() => setImageIndex(0)}
+          />
+        )}
       </Flex>
       <Flex flexDir={"column"} flex={1} justify={"space-between"} gap={5}>
-        {images.slice(1).map((image, index) => {
+        {images?.slice(1).map((image, index) => {
           return (
             <Image
               src={image}

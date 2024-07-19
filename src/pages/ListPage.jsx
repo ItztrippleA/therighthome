@@ -1,18 +1,33 @@
 import React, { useContext, useEffect } from "react";
-import { listData } from "../lib/dummydata";
 import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import Filter from "../components/filter/Filter";
 import Card from "../components/Card/Card";
 import Map from "../components/Map/Map";
 import { AuthContext } from "../context/AuthContext";
+import { useLocation } from "react-router-dom";
 
 const ListPage = () => {
-  const data = listData;
   const { fetchPosts, posts } = useContext(AuthContext);
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
+  const location = useLocation();
+
   useEffect(() => {
-    fetchPosts();
+    const params = new URLSearchParams(location.search);
+    const initialQuery = {
+      type: params.get("type") || "",
+      city: params.get("city") || "",
+      country: params.get("country") || "",
+      minPrice: params.get("minPrice") || 0,
+      maxPrice: params.get("maxPrice") || 0,
+      property: params.get("property") || "",
+    };
+    fetchPosts(initialQuery);
   }, []);
+
+  const handleSearch = (query) => {
+    fetchPosts(query);
+  };
+
   return (
     <Flex
       justify={"center"}
@@ -28,7 +43,7 @@ const ListPage = () => {
         gap={10}
       >
         <Box flex={3}>
-          <Filter />
+          <Filter onSearch={handleSearch} />
           <Flex gap={5} flexDir={"column"} mt={10}>
             {posts.map((item) => (
               <Card key={item.id} item={item} />
@@ -36,7 +51,7 @@ const ListPage = () => {
           </Flex>
         </Box>
         <Flex flex={2} pt={20} h={1000}>
-          {isDesktop && <Map data={data} />}
+          {isDesktop && <Map data={posts} />}
         </Flex>
       </Flex>
     </Flex>
