@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -62,6 +62,7 @@ const Profile = () => {
   const [propertyList, setPropertyList] = useState(proptypes["sell"]);
   const [selectedFaciItems, setSelectedFaciItems] = useState([]);
   const [images, setImages] = useState([]);
+  const [posts, setPosts] = useState([]);
   console.log(images);
   const handleMenuChange = (values) => {
     setSelectedFaciItems(values);
@@ -390,6 +391,36 @@ const Profile = () => {
         console.log(`upload error ${error}`);
       });
   };
+  useEffect(() => {
+    fetchMyPosts();
+  }, []);
+  const fetchMyPosts = async () => {
+    setLoading(true);
+
+    fetch(`${BASE_URL}/api/users/profilePosts`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log("pers Item", responseJson);
+        if (responseJson.success) {
+          setPosts(responseJson.userPosts);
+          setLoading(false);
+        } else {
+          alert(responseJson.message);
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        setRefreshing(false);
+      });
+  };
   return (
     <Flex
       justify="center"
@@ -455,7 +486,7 @@ const Profile = () => {
             </Button>
           </Flex>
           <Flex gap={5} flexDir="column" mt={10}>
-            {listData.map((item) => (
+            {posts.map((item) => (
               <Card key={item.id} item={item} />
             ))}
           </Flex>
