@@ -53,7 +53,7 @@ const Footer = () => {
               <Text cursor={"pointer"}>Privacy Policy</Text>
             </Link>
             <Link to={"/termsandcondition"}>
-              <Text cursor={"pointer"}>Terms and cnditions</Text>
+              <Text cursor={"pointer"}>Terms and conditions</Text>
             </Link>
             <Text cursor={"pointer"}></Text>
           </Flex>
