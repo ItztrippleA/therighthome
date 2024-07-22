@@ -24,7 +24,7 @@ const SinglePage = () => {
 
   useEffect(() => {
     fetchPost(id);
-    console.log(post);
+    // console.log(post);
   }, []);
   const facilities = post?.postDetail?.facilities;
   const mid = Math.ceil(facilities?.length / 2);

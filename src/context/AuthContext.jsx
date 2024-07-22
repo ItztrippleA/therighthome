@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     // Fetch user data from local storage on mount
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      console.log(storedUser);
+      // console.log(storedUser);
       setUser(JSON.parse(storedUser));
     }
   }, []);
@@ -115,7 +115,7 @@ export const AuthProvider = ({ children }) => {
       maxPrice = 0,
       property = "",
     } = query;
-    console.log({ type, city, country, minPrice, maxPrice, property });
+    // console.log({ type, city, country, minPrice, maxPrice, property });
 
     const headers = {
       "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export const AuthProvider = ({ children }) => {
     )
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.success) {
           setPosts(responseJson.data);
           setLoading(false);
@@ -170,7 +170,7 @@ export const AuthProvider = ({ children }) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.success) {
           setPost(responseJson.data);
           setLoading(false);
@@ -208,7 +208,7 @@ export const AuthProvider = ({ children }) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setLoading(false);
-        console.log("Login", responseJson);
+        // console.log("Login", responseJson);
         if (responseJson.success) {
           setUser(responseJson);
           console.log();
@@ -222,7 +222,7 @@ export const AuthProvider = ({ children }) => {
       .catch((error) => {
         setLoading(false);
         alert("Login error");
-        console.log(`Login error: ${error}`);
+        // console.log(`Login error: ${error}`);
       });
   };
   const constraints = {
@@ -327,7 +327,7 @@ export const AuthProvider = ({ children }) => {
       .catch((error) => {
         setLoading(false);
         alert("Registration error");
-        console.log(`Registration error: ${error}`);
+        // console.log(`Registration error: ${error}`);
       });
   };
 

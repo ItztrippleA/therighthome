@@ -63,7 +63,7 @@ const Profile = () => {
   const [selectedFaciItems, setSelectedFaciItems] = useState([]);
   const [images, setImages] = useState([]);
   const [posts, setPosts] = useState([]);
-  console.log(images);
+  // console.log(images);
   const handleMenuChange = (values) => {
     setSelectedFaciItems(values);
     setProperty((prevState) => ({
@@ -75,7 +75,7 @@ const Profile = () => {
     }));
   };
   const handleSelect = (value) => {
-    console.log(value === "Yes");
+    // console.log(value === "Yes");
     setProperty((prevState) => ({
       ...prevState,
       postData: {
@@ -94,7 +94,7 @@ const Profile = () => {
     }));
   };
   const handleSelectFur = (value) => {
-    console.log(value);
+    // console.log(value);
     setProperty((prevState) => ({
       ...prevState,
       postData: {
@@ -303,7 +303,7 @@ const Profile = () => {
     }
   };
   const handlePlaceSelected = (place) => {
-    console.log("Selected place:", place);
+    // console.log("Selected place:", place);
   };
   const [selectedItem, setSelectedItem] = useState("sell");
   // console.log(proptypes["sell"]);
@@ -311,15 +311,15 @@ const Profile = () => {
     if (!validateForm()) {
       return;
     }
-    console.log("str", {
-      ...property,
-      postData: {
-        ...property.postData,
-        negotiable: property.postData.negotiable,
-        images: images,
-      },
-    });
-    console.log(images);
+    // console.log("str", {
+    //   ...property,
+    //   postData: {
+    //     ...property.postData,
+    //     negotiable: property.postData.negotiable,
+    //     images: images,
+    //   },
+    // });
+    // console.log(images);
     // console.log(user.token);
     setLoading(true);
     await fetch(`${BASE_URL}/api/posts`, {
@@ -340,7 +340,7 @@ const Profile = () => {
       .then((res) => res.json())
       .then((responseJson) => {
         setLoading(false);
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.success) {
           // alert("Your post has been uploaded successfully");
           setProperty({
@@ -382,13 +382,13 @@ const Profile = () => {
           onCloseReg();
         } else {
           alert(`error${responseJson.message}`);
-          console.log("structure", responseJson);
+          // console.log("structure", responseJson);
         }
       })
       .catch((error) => {
         setLoading(false);
         alert("upload error");
-        console.log(`upload error ${error}`);
+        // console.log(`upload error ${error}`);
       });
   };
   useEffect(() => {
@@ -406,7 +406,7 @@ const Profile = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("pers Item", responseJson);
+        // console.log("pers Item", responseJson);
         if (responseJson.success) {
           setPosts(responseJson.userPosts);
           setLoading(false);
@@ -906,7 +906,7 @@ const Profile = () => {
                         p={7}
                         fontSize={20}
                         onChange={(e) => {
-                          console.log(property);
+                          // console.log(property);
                           setProperty((prevState) => ({
                             ...prevState,
                             postData: {

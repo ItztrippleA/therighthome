@@ -42,7 +42,7 @@ function UploadWidget({
         (error, result) => {
           if (!error && result && result.event === "success") {
             if (images.length < 5) {
-              console.log("Done! Here is the image info: ", result.info);
+              // console.log("Done! Here is the image info: ", result.info);
               setImages((prevUrls) => [...prevUrls, result.info.secure_url]);
               setSecureUrls((prevUrls) => [
                 ...prevUrls,

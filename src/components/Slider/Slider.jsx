@@ -4,7 +4,7 @@ import { BiLeftArrow, BiRightArrow } from "react-icons/bi";
 
 const Slider = ({ images }) => {
   const [imageIndex, setImageIndex] = useState(null);
-  console.log(images);
+  // console.log(images);
   const changeSlide = (direction) => {
     if (direction === "left") {
       if (imageIndex === 0) {

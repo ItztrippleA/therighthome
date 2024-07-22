@@ -98,6 +98,8 @@ const Filter = ({ onSearch }) => {
             <option value="sale">Buy</option>
             <option value="rent">Rent</option>
             <option value="shared">Shared Apartment</option>
+            <option value="distress">Distress</option>
+            <option value="hotel">Hotel</option>
           </Select>
           {/* <Select
             placeholder="Property"
