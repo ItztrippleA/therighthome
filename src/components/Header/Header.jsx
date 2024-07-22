@@ -120,9 +120,6 @@ const Header = () => {
                 <Link href="/list">
                   <Heading color={"#fff"}>Residence</Heading>
                 </Link>
-                <Link href="/">
-                  <Heading color={"#fff"}>Our Vision</Heading>
-                </Link>
                 {user ? (
                   <Link href="/profile">
                     <Heading color={"#fff"}>Profile</Heading>
@@ -137,6 +134,13 @@ const Header = () => {
                     </Heading>
                   </>
                 )}
+                <Link href="/">
+                  <Heading color={"#fff"}>Our Vision</Heading>
+                </Link>
+
+                <Link href="/">
+                  <Heading color={"#fff"}>About us</Heading>
+                </Link>
               </Flex>
             </ModalBody>
 
