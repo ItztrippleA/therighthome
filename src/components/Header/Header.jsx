@@ -1,5 +1,21 @@
 import React, { useContext } from "react";
-import { Flex, Text, Image, Link, Button, Avatar } from "@chakra-ui/react";
+import {
+  Flex,
+  Text,
+  Image,
+  Link,
+  Button,
+  Avatar,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Heading,
+} from "@chakra-ui/react";
 import { BiMenuAltRight } from "react-icons/bi";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +24,11 @@ const Header = () => {
   const isMobile = useMediaQuery({ query: `(max-width: 768px)` });
   const navigate = useNavigate();
   const { user, onOpen, onOpenReg } = useContext(AuthContext);
+  const {
+    isOpen: isOpenMenu,
+    onOpen: onOpenMenu,
+    onClose: onCloseMenu,
+  } = useDisclosure();
   return (
     <Flex
       w={"100%"}
@@ -34,16 +55,16 @@ const Header = () => {
             <Link href="#">
               <Text fontSize="md">Our Values</Text>
             </Link>
-            <Link onClick={onOpen}>
-              {user ? (
-                <Avatar
-                  name={`${user.firstname} ${user.lastname}`}
-                  src={user.avatar}
-                />
-              ) : (
+            {user ? (
+              <Avatar
+                name={`${user.firstname} ${user.lastname}`}
+                src={user.avatar}
+              />
+            ) : (
+              <Link onClick={onOpen}>
                 <Text fontSize="md">Sign in</Text>
-              )}
-            </Link>
+              </Link>
+            )}
             {user ? (
               <Link href="/profile">
                 <Button
@@ -69,10 +90,62 @@ const Header = () => {
           </Flex>
         ) : (
           <Flex className="menu-icon">
-            <BiMenuAltRight size="25px" fill="#fff" />
+            <BiMenuAltRight
+              size="25px"
+              fill="#fff"
+              onClick={() => onOpenMenu()}
+            />
           </Flex>
         )}
       </Flex>
+      {isMobile && (
+        <Modal onClose={onCloseMenu} size={"full"} isOpen={isOpenMenu}>
+          <ModalOverlay />
+          <ModalContent bgColor={"#000"}>
+            <ModalHeader color={"#fff"}>Menu's</ModalHeader>
+            <ModalCloseButton color={"#fff"} />
+            <ModalBody justifyContent={"center"} alignItems={"center"}>
+              <Flex
+                align={"center"}
+                justify={"center"}
+                w={"100%"}
+                flexDir={"column"}
+                flex={1}
+                gap={10}
+                marginTop={30}
+              >
+                <Link href="/">
+                  <Heading color={"#fff"}>Home</Heading>
+                </Link>
+                <Link href="/list">
+                  <Heading color={"#fff"}>Residence</Heading>
+                </Link>
+                <Link href="/">
+                  <Heading color={"#fff"}>Our Vision</Heading>
+                </Link>
+                {user ? (
+                  <Link href="/profile">
+                    <Heading color={"#fff"}>Profile</Heading>
+                  </Link>
+                ) : (
+                  <>
+                    <Link onClick={onOpen}>
+                      <Heading color={"#fff"}>Sign in</Heading>
+                    </Link>
+                    <Heading color={"#fff"} onClick={onOpenReg}>
+                      Sign Up
+                    </Heading>
+                  </>
+                )}
+              </Flex>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button onClick={onCloseMenu}>Close</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
     </Flex>
   );
 };

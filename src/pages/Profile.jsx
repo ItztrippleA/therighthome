@@ -435,7 +435,7 @@ const Profile = () => {
         w={["90%", "75%"]}
         gap={10}
       >
-        <Box flex={3} p={10}>
+        <Box flex={3} p={[0, 10]}>
           <Flex justify="space-between">
             <Heading>User Information</Heading>
             <Button
