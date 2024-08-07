@@ -67,11 +67,11 @@ const GetStarted = () => {
             </Button>
           </Link>
           <Link
-            href="https://play.google.com/apps/internaltest/4701589625514840911"
+            href="https://expo.dev/artifacts/eas/mtqQRz1pzPXmVBmhzfSwYT.apk"
             isExternal
           >
             <Button leftIcon={<Icon as={FaGooglePlay} />} colorScheme="blue">
-              Sign up for Android early access
+              Get started with Android early access
             </Button>
           </Link>
         </Flex>
