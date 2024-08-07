@@ -9,7 +9,9 @@ import {
   Heading,
   Circle,
   Input,
+  Icon,
 } from "@chakra-ui/react";
+import { FaApple, FaGooglePlay } from "react-icons/fa";
 const GetStarted = () => {
   return (
     <Flex w={"100%"} justifyContent="center" alignItems="center">
@@ -37,7 +39,7 @@ const GetStarted = () => {
         <Text color={"rgba(255, 255, 255, 0.78)"} fontSize={"0.9rem"}>
           Start by Downloading our app for amazing discounts
         </Text>
-        <Button
+        {/* <Button
           bg="#5a73d7"
           border={"2px solid white"}
           borderRadius={"10px"}
@@ -48,7 +50,31 @@ const GetStarted = () => {
           <Text fontSize="0.9rem" fontWeight={"600"}>
             Get Started
           </Text>
-        </Button>
+        </Button> */}
+        <Flex
+          direction={["column", "row"]}
+          justify="center"
+          align="center"
+          padding="20px"
+          gap="4"
+        >
+          <Link
+            href="https://apps.apple.com/ng/app/the-home-basket/id6504646908"
+            isExternal
+          >
+            <Button leftIcon={<Icon as={FaApple} />} colorScheme="black">
+              Get Started with iOS
+            </Button>
+          </Link>
+          <Link
+            href="https://play.google.com/apps/internaltest/4701589625514840911"
+            isExternal
+          >
+            <Button leftIcon={<Icon as={FaGooglePlay} />} colorScheme="blue">
+              Sign up for Android early access
+            </Button>
+          </Link>
+        </Flex>
       </Flex>
     </Flex>
   );
