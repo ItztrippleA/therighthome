@@ -67,7 +67,7 @@ const GetStarted = () => {
             </Button>
           </Link>
           <Link
-            href="https://expo.dev/artifacts/eas/mtqQRz1pzPXmVBmhzfSwYT.apk"
+            href="https://expo.dev/artifacts/eas/soqTZq2r3Nwcief3AmBUoD.apk"
             isExternal
           >
             <Button leftIcon={<Icon as={FaGooglePlay} />} colorScheme="blue">
