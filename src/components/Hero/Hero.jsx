@@ -285,7 +285,7 @@ const Hero = () => {
                 Happy Customers
               </Text>
             </Flex>
-            <Flex align={"center"} flexDirection={"column"}>
+            {/* <Flex align={"center"} flexDirection={"column"}>
               <Flex align={"center"}>
                 <CountUp
                   end={28}
@@ -299,7 +299,7 @@ const Hero = () => {
               <Text fontSize={".9rem"} color={"rgba(140 139 139)"}>
                 Award Winnings
               </Text>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Flex>
         <Flex justify={"center"} align={"center"}>

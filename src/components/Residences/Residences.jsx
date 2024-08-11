@@ -9,6 +9,7 @@ import { useContext, useEffect } from "react";
 const Residences = () => {
   const data = listData;
   const { posts, fetchPosts } = useContext(AuthContext);
+
   useEffect(() => {
     const initialQuery = {
       type: "",
@@ -34,7 +35,13 @@ const Residences = () => {
     );
   };
   return (
-    <Flex w={"100%"} align={"center"} justify={"center"} position={"relative"}>
+    <Flex
+      w={"100%"}
+      align={"center"}
+      justify={"center"}
+      position={"relative"}
+      mt={20}
+    >
       <Flex w={["90%", "80%"]} flexDirection={"column"}>
         <Box>
           <Text color={"orange"} fontSize={"1.5rem"} fontWeight={"600"}>
@@ -87,7 +94,7 @@ const Residences = () => {
                     h={"150px"}
                   />
                   <Flex fontSize={"1.2rem"} fontWeight={"600"}>
-                    <Text color={"orange"}>$</Text>
+                    <Text color={"orange"}>£</Text>
                     <Text>{card.price}</Text>
                   </Flex>
                   <Text className="primaryText" fontSize={"1.2rem"}>

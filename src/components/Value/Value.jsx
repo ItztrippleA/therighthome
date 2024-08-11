@@ -39,14 +39,14 @@ const Value = () => {
         <Flex justifyContent="flex-start" alignItems="center" flex={1}>
           <Flex flexDir={"column"} gap={".5rem"}>
             <Text color={"orange"} fontSize={"1.5rem"} fontWeight={"600"}>
-              Our Value
+              Our Vision
             </Text>
             <Text color={"#1f3e72"} fontWeight={"bold"} fontSize={"2.5rem"}>
               Value we give to you
             </Text>
             <Text className="secondaryText" fontSize={"0.9rem"}>
-              We always ready to help by providing the best services for you
-              <br />W believe a good place to live can make your life better
+              To be the leading user centric platform for easy
+              <br /> actualization of real estate and hoteling gratification.
             </Text>
 
             <Accordion

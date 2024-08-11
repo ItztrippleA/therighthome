@@ -21,7 +21,7 @@ const HomePage = () => {
 
         <Hero />
       </>
-      <Companies />
+      {/* <Companies /> */}
       <Residences />
       <Value />
       <Contact />

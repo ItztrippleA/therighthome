@@ -17,7 +17,7 @@ const Contact = () => {
   return (
     <Flex w={"100%"} justifyContent="center" alignItems="center">
       <Flex
-        w={["90%", "80%"]}
+        w={["100%", "80%"]}
         flexDir={["column", "row"]}
         px={[5, 12]}
         py={10}
@@ -43,10 +43,11 @@ const Contact = () => {
               gap={"1.5rem"}
             >
               <Flex w="100%" flexDir={"column"} gap={"1rem"}>
+                {/* Call Section */}
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
-                  w={"16rem"}
+                  w={"100%"}
                   p={"1rem"}
                   border={"0.8px solid rgba(128,128,128,0.143)"}
                   borderRadius={"5px"}
@@ -55,13 +56,7 @@ const Contact = () => {
                   cursor={"pointer"}
                   className="mode"
                 >
-                  <Flex
-                    flexDir={"row"}
-                    justify={"center"}
-                    align={"center"}
-                    gap={"1.6rem"}
-                    w={"100%"}
-                  >
+                  <Flex flexDir={"row"} gap={"1.6rem"} w={"100%"}>
                     <Flex
                       justify={"center"}
                       p={"10px"}
@@ -72,28 +67,36 @@ const Contact = () => {
                     </Flex>
                     <Flex justify={"center"} flexDir={"column"}>
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
-                        call
+                        Call
                       </Text>
-                      <Text fontSize={"1.1rem"}>+880 1723456789</Text>
+                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
-                    <Button
-                      bg="#1A3D5B"
-                      color="white"
-                      _hover={{ bg: "#F6874F", scale: 0.8 }}
-                      w={"100%"}
+                    <Link
+                      href="tel:+447853734503"
+                      style={{ width: "100%" }}
+                      _hover={{ textDecoration: "none" }}
                     >
-                      <Text fontSize="0.9rem" fontWeight={"600"}>
-                        Call now
-                      </Text>
-                    </Button>
+                      <Button
+                        bg="#1A3D5B"
+                        color="white"
+                        _hover={{ bg: "#F6874F", transform: "scale(0.95)" }}
+                        w={"100%"}
+                      >
+                        <Text fontSize="0.9rem" fontWeight={"600"}>
+                          Call now
+                        </Text>
+                      </Button>
+                    </Link>
                   </Flex>
                 </Flex>
+
+                {/* Chat Section */}
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
-                  w={"16rem"}
+                  w={"100%"}
                   p={"1rem"}
                   border={"0.8px solid rgba(128,128,128,0.143)"}
                   borderRadius={"5px"}
@@ -104,7 +107,6 @@ const Contact = () => {
                 >
                   <Flex
                     flexDir={"row"}
-                    justify={"center"}
                     align={"center"}
                     gap={"1.6rem"}
                     w={"100%"}
@@ -121,24 +123,30 @@ const Contact = () => {
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
                         Chat
                       </Text>
-                      <Text fontSize={"1.1rem"}>+880 1723456789</Text>
+                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
-                    <Button
-                      bg="#1A3D5B"
-                      color="white"
-                      _hover={{ bg: "#F6874F", scale: 0.8 }}
-                      w={"100%"}
+                    <Link
+                      href="sms:+447853734503"
+                      style={{ width: "100%" }}
+                      _hover={{ textDecoration: "none" }}
                     >
-                      <Text fontSize="0.9rem" fontWeight={"600"}>
-                        Chat now
-                      </Text>
-                    </Button>
+                      <Button
+                        bg="#1A3D5B"
+                        color="white"
+                        _hover={{ bg: "#F6874F", transform: "scale(0.95)" }}
+                        w={"100%"}
+                      >
+                        <Text fontSize="0.9rem" fontWeight={"600"}>
+                          Chat now
+                        </Text>
+                      </Button>
+                    </Link>
                   </Flex>
                 </Flex>
               </Flex>
-              <Flex w="100%" flexDir={"column"} gap={"1rem"}>
+              {/* <Flex w="100%" flexDir={"column"} gap={"1rem"}>
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
@@ -233,7 +241,7 @@ const Contact = () => {
                     </Button>
                   </Flex>
                 </Flex>
-              </Flex>
+              </Flex> */}
             </Flex>
           </Flex>
         </Flex>
