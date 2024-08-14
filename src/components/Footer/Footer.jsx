@@ -26,13 +26,12 @@ const Footer = () => {
         <Flex flexDir={"column"} alignItems={"flex-start"} gap={"1.5rem"}>
           <Image src="./hblogowh.jpeg" alt="value" h={"60px"} />
           <Text color={" rgb(140 139 139)"} fontSize={"0.9rem"}>
-            Our vision is to make all people <br />
-            the best place to live for them
+            Worlds No.1 user centric platform
           </Text>
         </Flex>
         <Flex flexDir={"column"} align={"flex-start"} gap={"1.5rem"}>
           <Text color={"#1f3e72"} fontSize={"1.5rem"} fontWeight={"bold"}>
-            Information
+            Address
           </Text>
           <Text
             color={" rgb(140 139 139)"}
@@ -40,7 +39,6 @@ const Footer = () => {
             textAlign={"left"}
           >
             39A QUEENS ROAD, HYDE PARK,LEEDS. LS6 1NY. <br />
-            the best place to live for them
           </Text>
           <Flex
             align={"flex-start"}
@@ -48,7 +46,9 @@ const Footer = () => {
             gap={"1.5rem"}
             fontWeight={"500"}
           >
-            <Text cursor={"pointer"}>About us</Text>
+            <Link to={"/about"}>
+              <Text cursor={"pointer"}>About us</Text>
+            </Link>
             <Link to={"/privacypolicy"}>
               <Text cursor={"pointer"}>Privacy Policy</Text>
             </Link>

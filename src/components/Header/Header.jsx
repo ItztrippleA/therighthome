@@ -53,7 +53,7 @@ const Header = () => {
               <Text fontSize="md">Residences</Text>
             </Link>
             <Link href="#">
-              <Text fontSize="md">Our Values</Text>
+              <Text fontSize="md">Our Vision</Text>
             </Link>
             {user ? (
               <Avatar
@@ -138,7 +138,7 @@ const Header = () => {
                   <Heading color={"#fff"}>Our Vision</Heading>
                 </Link>
 
-                <Link href="/">
+                <Link href={"/about"}>
                   <Heading color={"#fff"}>About us</Heading>
                 </Link>
               </Flex>

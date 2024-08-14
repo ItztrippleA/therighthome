@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import { useCallback, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import About from "./pages/About";
 
 function App() {
   const { user = {} } = useContext(AuthContext);
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/list" element={<ListPage />} />
         <Route path="/:id" element={<SinglePage />} />
+        <Route path="/about" element={<About />} />
         <Route path="/termsandcondition" element={<TermsandCondition />} />
         <Route path="/profile" element={user ? <Profile /> : <HomePage />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />

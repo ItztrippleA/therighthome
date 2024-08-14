@@ -146,11 +146,62 @@ const Contact = () => {
                   </Flex>
                 </Flex>
               </Flex>
+              {/* //here */}
               {/* <Flex w="100%" flexDir={"column"} gap={"1rem"}>
+          
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
-                  w={"16rem"}
+                  w={"100%"}
+                  p={"1rem"}
+                  border={"0.8px solid rgba(128,128,128,0.143)"}
+                  borderRadius={"5px"}
+                  gap={"1rem"}
+                  transition={"all 300ms ease-in"}
+                  cursor={"pointer"}
+                  className="mode"
+                >
+                  <Flex flexDir={"row"} gap={"1.6rem"} w={"100%"}>
+                    <Flex
+                      justify={"center"}
+                      p={"10px"}
+                      background={"#eeeeff"}
+                      borderRadius={"5px"}
+                    >
+                      <MdCall size="25px" fill="#4066ff" />
+                    </Flex>
+                    <Flex justify={"center"} flexDir={"column"}>
+                      <Text fontSize={"1.1rem"} fontWeight={"600"}>
+                        Call
+                      </Text>
+                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
+                    </Flex>
+                  </Flex>
+                  <Flex justify={"center"} w={"100%"}>
+                    <Link
+                      href="tel:+447853734503"
+                      style={{ width: "100%" }}
+                      _hover={{ textDecoration: "none" }}
+                    >
+                      <Button
+                        bg="#1A3D5B"
+                        color="white"
+                        _hover={{ bg: "#F6874F", transform: "scale(0.95)" }}
+                        w={"100%"}
+                      >
+                        <Text fontSize="0.9rem" fontWeight={"600"}>
+                          Call now
+                        </Text>
+                      </Button>
+                    </Link>
+                  </Flex>
+                </Flex>
+
+          
+                <Flex
+                  flexDir={"column"}
+                  justify={"flex-start"}
+                  w={"100%"}
                   p={"1rem"}
                   border={"0.8px solid rgba(128,128,128,0.143)"}
                   borderRadius={"5px"}
@@ -161,7 +212,6 @@ const Contact = () => {
                 >
                   <Flex
                     flexDir={"row"}
-                    justify={"center"}
                     align={"center"}
                     gap={"1.6rem"}
                     w={"100%"}
@@ -176,69 +226,28 @@ const Contact = () => {
                     </Flex>
                     <Flex justify={"center"} flexDir={"column"}>
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
-                        Video call
+                        Chat
                       </Text>
-                      <Text fontSize={"1.1rem"}>+880 1723456789</Text>
+                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
-                    <Button
-                      bg="#1A3D5B"
-                      color="white"
-                      _hover={{ bg: "#F6874F", scale: 0.8 }}
-                      w={"100%"}
+                    <Link
+                      href="sms:+447853734503"
+                      style={{ width: "100%" }}
+                      _hover={{ textDecoration: "none" }}
                     >
-                      <Text fontSize="0.9rem" fontWeight={"600"}>
-                        Call now
-                      </Text>
-                    </Button>
-                  </Flex>
-                </Flex>
-                <Flex
-                  flexDir={"column"}
-                  justify={"flex-start"}
-                  w={"16rem"}
-                  p={"1rem"}
-                  border={"0.8px solid rgba(128,128,128,0.143)"}
-                  borderRadius={"5px"}
-                  gap={"1rem"}
-                  transition={"all 300ms ease-in"}
-                  cursor={"pointer"}
-                  className="mode"
-                >
-                  <Flex
-                    flexDir={"row"}
-                    justify={"center"}
-                    align={"center"}
-                    gap={"1.6rem"}
-                    w={"100%"}
-                  >
-                    <Flex
-                      justify={"center"}
-                      p={"10px"}
-                      background={"#eeeeff"}
-                      borderRadius={"5px"}
-                    >
-                      <HiChatBubbleBottomCenter size="25px" fill="#4066ff" />
-                    </Flex>
-                    <Flex justify={"center"} flexDir={"column"}>
-                      <Text fontSize={"1.1rem"} fontWeight={"600"}>
-                        Message
-                      </Text>
-                      <Text fontSize={"1.1rem"}>+880 1723456789</Text>
-                    </Flex>
-                  </Flex>
-                  <Flex justify={"center"} w={"100%"}>
-                    <Button
-                      bg="#1A3D5B"
-                      color="white"
-                      _hover={{ bg: "#F6874F", scale: 0.8 }}
-                      w={"100%"}
-                    >
-                      <Text fontSize="0.9rem" fontWeight={"600"}>
-                        Message now
-                      </Text>
-                    </Button>
+                      <Button
+                        bg="#1A3D5B"
+                        color="white"
+                        _hover={{ bg: "#F6874F", transform: "scale(0.95)" }}
+                        w={"100%"}
+                      >
+                        <Text fontSize="0.9rem" fontWeight={"600"}>
+                          Chat now
+                        </Text>
+                      </Button>
+                    </Link>
                   </Flex>
                 </Flex>
               </Flex> */}
