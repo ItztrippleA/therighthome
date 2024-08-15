@@ -147,8 +147,7 @@ const Contact = () => {
                 </Flex>
               </Flex>
               {/* //here */}
-              {/* <Flex w="100%" flexDir={"column"} gap={"1rem"}>
-          
+              <Flex w="100%" flexDir={"column"} gap={"1rem"}>
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
@@ -174,12 +173,12 @@ const Contact = () => {
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
                         Call
                       </Text>
-                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
+                      <Text fontSize={"1.1rem"}>+447817350938</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
                     <Link
-                      href="tel:+447853734503"
+                      href="tel:+447817350938"
                       style={{ width: "100%" }}
                       _hover={{ textDecoration: "none" }}
                     >
@@ -197,7 +196,6 @@ const Contact = () => {
                   </Flex>
                 </Flex>
 
-          
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
@@ -228,12 +226,12 @@ const Contact = () => {
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
                         Chat
                       </Text>
-                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
+                      <Text fontSize={"1.1rem"}>+447817350938</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
                     <Link
-                      href="sms:+447853734503"
+                      href="sms:+447817350938"
                       style={{ width: "100%" }}
                       _hover={{ textDecoration: "none" }}
                     >
@@ -250,7 +248,7 @@ const Contact = () => {
                     </Link>
                   </Flex>
                 </Flex>
-              </Flex> */}
+              </Flex>
             </Flex>
           </Flex>
         </Flex>

@@ -260,8 +260,8 @@ const About = () => {
                 </Flex>
                 <Flex direction="column">
                   <Flex align={"center"} gap={2} flexWrap={"wrap"}>
-                    <Heading color={"#1A3D5C"}>NNENAYA</Heading>
-                    <Heading color={"#F6874F"}>JONSON</Heading>
+                    <Heading color={"#1A3D5C"}>NNENNAYA</Heading>
+                    <Heading color={"#F6874F"}>JOHNSON</Heading>
                   </Flex>
 
                   <Box
