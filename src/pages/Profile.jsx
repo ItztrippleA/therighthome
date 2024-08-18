@@ -480,7 +480,7 @@ const Profile = () => {
               bg="#1A3D5B"
               color="white"
               _hover={{ bg: "#F6874F" }}
-              onClick={
+              onClick={() =>
                 // onOpenReg
                 alert("coming soon")
               }
