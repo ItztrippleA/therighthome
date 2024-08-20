@@ -15,25 +15,28 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
 } from "@chakra-ui/react";
 import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
 import { useNavigate } from "react-router-dom";
-import { SearchIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
 import { BASE_URL } from "../../Environment";
 import { AuthContext } from "../../context/AuthContext";
+import GooglePlacesAutocomplete from "../../pages/GooglePlacesAutocomplete";
 
 const Hero = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const navigate = useNavigate();
-  const [query, setQuery] = useState({
-    type: "",
-    country: "",
-    city: "",
-    minPrice: 0,
-    maxPrice: 0,
-  });
-  const { user, posts, setPosts, setLoading, setRefreshing } =
+
+  const { user, posts, setPosts, setLoading, setRefreshing, query, setQuery } =
     useContext(AuthContext);
 
   const fetchPosts = async () => {
@@ -173,33 +176,25 @@ const Hero = () => {
                 {isDesktop && (
                   <HiLocationMarker color="#1f3e72" size={25} flex={1} />
                 )}
-                <Input
-                  type="text"
-                  placeholder="Search by city"
-                  border={"none"}
-                  outline={"none"}
-                  color={"black"}
-                  flex={3}
-                  p={5}
-                  w={"100%"}
-                  onChange={(e) =>
-                    setQuery((prev) => ({ ...prev, city: e.target.value }))
-                  }
-                />
-                <Input
-                  type="text"
-                  placeholder="Search by country"
-                  border={"none"}
-                  outline={"none"}
-                  color={"black"}
-                  flex={3}
-                  p={5}
-                  w={"100%"}
-                  onChange={(e) =>
-                    setQuery((prev) => ({ ...prev, country: e.target.value }))
-                  }
-                />
-
+                <GooglePlacesAutocomplete setQuery={setQuery} query={query} />
+              </Flex>
+            </Flex>
+            <Flex
+              bg={"#fff"}
+              borderRadius={"5px"}
+              border={"3px solid #1f3e72"}
+              p={"0.5rem 1rem"}
+              justify={"space-between"}
+              align={"center"}
+              flexDir={["column", "row"]}
+              gap={3}
+              w={"100%"}
+              flex={1}
+            >
+              <Flex align={"center"} flexDir={["column", "row"]}>
+                {/* {isDesktop && (
+                  <HiLocationMarker color="#1f3e72" size={25} flex={1} />
+                )} */}
                 <NumberInput
                   maxW={[32]}
                   min={0}

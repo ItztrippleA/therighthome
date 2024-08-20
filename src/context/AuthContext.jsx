@@ -18,14 +18,19 @@ import {
   Text,
 } from "@chakra-ui/react";
 import validate from "validate.js";
-
+import { LoadScript, Autocomplete } from "@react-google-maps/api";
 export const AuthContext = createContext();
+import axios from "axios";
 
 export const AuthProvider = ({ children }) => {
+  const libraries = ["places"];
+  const [autocomplete, setAutocomplete] = useState(null);
+  const [address, setAddress] = useState("");
   const [user, setUser] = useState(null);
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [intent, setIntent] = useState("");
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -38,6 +43,14 @@ export const AuthProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
   const [post, setPost] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [query, setQuery] = useState({
+    type: "",
+    country: "",
+    city: "",
+    minPrice: 0,
+    maxPrice: 0,
+  });
+
   const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
 
   const {
@@ -46,6 +59,7 @@ export const AuthProvider = ({ children }) => {
     onClose: onCloseReg,
   } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
+  const [membershipExist, setmembershipExist] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClick = () => setShow(!show);
   const initialRef = React.useRef(null);
@@ -77,7 +91,7 @@ export const AuthProvider = ({ children }) => {
       bedroom: 0,
       bathroom: 0,
       type: "rent",
-      promotionType: "Premium",
+      promotionType: "PostOnce",
       property: "apartment",
       latitude: "",
       longitude: "",
@@ -88,17 +102,18 @@ export const AuthProvider = ({ children }) => {
       description: "",
       listedBy: "agent",
       security: false,
+      isActive: true,
       name: "",
       phoneNumber: "",
       negotiable: false,
-      isPromoted: false,
+      isPromoted: true,
     },
     postDetail: {
       desc: "Desc 1",
       facilities: [],
       charge: false,
       pet: "not-Allowed",
-      income: "",
+      income: "£",
       school: 0,
       bus: 0,
     },
@@ -331,6 +346,45 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  useEffect(() => {
+    // Function to get user's location
+    const getLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log(latitude, longitude);
+            await getCountryFromCoordinates(latitude, longitude);
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    // Function to get country from coordinates
+    const getCountryFromCoordinates = async (lat, lon) => {
+      try {
+        // Using a free reverse geocoding API (OpenCage Data)
+        const response = await axios.get(
+          `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lon}&key=f189995b26c94e4fb9eed61ef8d670b5`
+        );
+        console.log(response);
+        const { country } = response.data.results[0].components;
+        setQuery((prev) => ({ ...prev, country }));
+        console.log(country);
+        setCountry(country);
+      } catch (error) {
+        console.error("Error getting country from coordinates:", error);
+      }
+    };
+
+    getLocation();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -358,6 +412,15 @@ export const AuthProvider = ({ children }) => {
         fetchPost,
         post,
         setPost,
+        address,
+        setAddress,
+        membershipExist,
+        setmembershipExist,
+        libraries,
+        query,
+        setQuery,
+        intent,
+        setIntent,
       }}
     >
       <Modal

@@ -43,10 +43,21 @@ import GooglePlacesAutocomplete from "../components/GooglePlaces/GooglePlacesAut
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { MdPictureAsPdf, MdPictureInPicture } from "react-icons/md";
 import UploadWidget from "../components/UploadWidget/UploadWidget";
+import MembershipModal from "./MembershipModal";
+import MembershipModalUk from "./MembershipModalUk";
 const Profile = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
-  const { user, setUser, setLoading, loading, setProperty, property } =
-    useContext(AuthContext);
+  const {
+    user,
+    setUser,
+    setLoading,
+    loading,
+    setProperty,
+    property,
+    setmembershipExist,
+    membershipExist,
+    country,
+  } = useContext(AuthContext);
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
@@ -84,6 +95,7 @@ const Profile = () => {
       },
     }));
   };
+
   const handleSelectServ = (value) => {
     setProperty((prevState) => ({
       ...prevState,
@@ -393,7 +405,43 @@ const Profile = () => {
   };
   useEffect(() => {
     fetchMyPosts();
+    checkMembership();
   }, []);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalUkOpen, setIsModalUkOpen] = useState(false);
+  const checkMembership = async () => {
+    setLoading(true);
+    fetch(`${BASE_URL}/api/membership/check-membership`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.success) {
+          console.log("status", responseJson);
+
+          responseJson.hasActiveMembership
+            ? setmembershipExist(true)
+            : setmembershipExist(false);
+          //   setPosts(responseJson.data);
+          setLoading(false);
+          //   setRefreshing(false);
+        } else {
+          alert(responseJson.message);
+          setLoading(false);
+          //   setRefreshing(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        // setRefreshing(false);
+      });
+  };
   const fetchMyPosts = async () => {
     setLoading(true);
 
@@ -421,6 +469,11 @@ const Profile = () => {
         setRefreshing(false);
       });
   };
+  const {
+    isOpen: isOpenCountry,
+    onOpen: onOpenCOuntry,
+    onClose: onCloseCountry,
+  } = useDisclosure();
   return (
     <Flex
       justify="center"
@@ -479,10 +532,14 @@ const Profile = () => {
             <Button
               bg="#1A3D5B"
               color="white"
+              isLoading={loading}
               _hover={{ bg: "#F6874F" }}
-              onClick={() =>
-                // onOpenReg
-                alert("coming soon")
+              onClick={
+                () => {
+                  console.log(country);
+                  membershipExist ? onOpenReg() : onOpenCOuntry();
+                }
+                // alert("coming soon")
               }
             >
               <Text fontSize="md">Add New Post</Text>
@@ -496,6 +553,103 @@ const Profile = () => {
         </Box>
         <Flex flex={2}></Flex>
       </Flex>
+
+      <Modal isOpen={isOpenCountry} onClose={onCloseCountry} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Select Country of Property</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Menu>
+              <MenuButton
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+                colorScheme={"gray"}
+                flex={1}
+                w={"100%"}
+                p={7}
+              >
+                Country
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    onCloseCountry();
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        country: "Nigeria",
+                      },
+                      postDetail: {
+                        ...prevState.postDetail,
+                        income: "₦",
+                      },
+                    }));
+                  }}
+                >
+                  Nigeria
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setIsModalUkOpen(true);
+                    onCloseCountry();
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        country: "United Kingdom",
+                      },
+                      postDetail: {
+                        ...prevState.postDetail,
+                        income: "£",
+                      },
+                    }));
+                  }}
+                >
+                  United Kingdom
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setIsModalUkOpen(true);
+                    onCloseCountry();
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        country: "United States",
+                      },
+                      postDetail: {
+                        ...prevState.postDetail,
+                        income: "$",
+                      },
+                    }));
+                  }}
+                >
+                  United States
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onCloseCountry}>
+              Close
+            </Button>
+            {/* <Button variant="ghost">Secondary Action</Button> */}
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <MembershipModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+      <MembershipModalUk
+        isOpen={isModalUkOpen}
+        onClose={() => setIsModalUkOpen(false)}
+      />
 
       <Modal
         initialFocusRef={initialRef}
@@ -825,24 +979,79 @@ const Profile = () => {
                         }
                       />
                     </FormControl>
-                    <FormControl>
-                      <FormLabel>Country</FormLabel>
-                      <Input
-                        placeholder="Country"
-                        value={property.country}
-                        p={7}
-                        fontSize={20}
-                        onChange={(e) =>
-                          setProperty((prevState) => ({
-                            ...prevState,
-                            postData: {
-                              ...prevState.postData,
-                              country: e.target.value,
-                            },
-                          }))
-                        }
-                      />
-                    </FormControl>
+
+                    <Box w={"100%"}>
+                      <FormLabel>
+                        {property.postData.country == ""
+                          ? "Country"
+                          : property.postData.country}
+                      </FormLabel>
+                      <Menu>
+                        <MenuButton
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                          colorScheme={"gray"}
+                          flex={1}
+                          w={"100%"}
+                          p={7}
+                        >
+                          Country
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            onClick={() =>
+                              setProperty((prevState) => ({
+                                ...prevState,
+                                postData: {
+                                  ...prevState.postData,
+                                  country: "Nigeria",
+                                },
+                                postDetail: {
+                                  ...prevState.postDetail,
+                                  income: "₦",
+                                },
+                              }))
+                            }
+                          >
+                            Nigeria
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() =>
+                              setProperty((prevState) => ({
+                                ...prevState,
+                                postData: {
+                                  ...prevState.postData,
+                                  country: "United Kingdom",
+                                },
+                                postDetail: {
+                                  ...prevState.postDetail,
+                                  income: "£",
+                                },
+                              }))
+                            }
+                          >
+                            United Kingdom
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() =>
+                              setProperty((prevState) => ({
+                                ...prevState,
+                                postData: {
+                                  ...prevState.postData,
+                                  country: "United States",
+                                },
+                                postDetail: {
+                                  ...prevState.postDetail,
+                                  income: "$",
+                                },
+                              }))
+                            }
+                          >
+                            United States
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </Box>
                   </Flex>
                   <Flex gap={10} flexDir={["column", "row"]} align={"center"}>
                     <FormControl>
@@ -1143,7 +1352,7 @@ const Profile = () => {
                       validateForm={() => validateForm()}
                     />
                   )}
-                  <Flex gap={10} flexDir={["column", "row"]}>
+                  {/* <Flex gap={10} flexDir={["column", "row"]}>
                     <Flex
                       style={{
                         width: "100%",
@@ -1217,7 +1426,7 @@ const Profile = () => {
                         </Flex>
                       </Flex>
                     </Flex>
-                  </Flex>
+                  </Flex> */}
                 </Flex>
               ) : (
                 <Flex flex={1} flexDir={"column"} gap={10} p={[0, 10]}>
