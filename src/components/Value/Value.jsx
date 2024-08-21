@@ -14,7 +14,7 @@ import data from "../../utils/accordion";
 
 const Value = () => {
   return (
-    <Flex w={"100%"} justifyContent="center" alignItems="center">
+    <Flex w={"100%"} justifyContent="center" alignItems="center" mt={20}>
       <Flex
         w={["90%", "80%"]}
         flexDir={["column", "row"]}

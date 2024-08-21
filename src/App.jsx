@@ -8,6 +8,7 @@ import ListPage from "./pages/ListPage";
 import SinglePage from "./pages/SinglePage";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+// import "dotenv/config";
 import { useCallback, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import About from "./pages/About";

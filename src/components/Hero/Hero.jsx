@@ -31,7 +31,7 @@ import { ChevronDownIcon, SearchIcon } from "@chakra-ui/icons";
 import { BASE_URL } from "../../Environment";
 import { AuthContext } from "../../context/AuthContext";
 import GooglePlacesAutocomplete from "../../pages/GooglePlacesAutocomplete";
-
+// import "dotenv/config";
 const Hero = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const navigate = useNavigate();
@@ -39,6 +39,7 @@ const Hero = () => {
   const { user, posts, setPosts, setLoading, setRefreshing, query, setQuery } =
     useContext(AuthContext);
 
+  // console.log("hello", import.meta.env.VITE_PAYSTACK_KEY);
   const fetchPosts = async () => {
     setLoading(true);
     setRefreshing(true);
@@ -238,9 +239,13 @@ const Hero = () => {
                 aria-label="Search"
                 size="lg"
                 onClick={() => {
-                  const queryParams = new URLSearchParams(query).toString();
-                  navigate(`/list?${queryParams}`);
-                  fetchPosts();
+                  if (query.country == "") {
+                    alert("Kindly select a location");
+                  } else {
+                    const queryParams = new URLSearchParams(query).toString();
+                    navigate(`/list?${queryParams}`);
+                    fetchPosts();
+                  }
                 }}
                 icon={<SearchIcon />}
               />

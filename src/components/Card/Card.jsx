@@ -31,7 +31,7 @@ const Card = ({ item }) => {
       flexDir={["column", "row"]}
       onClick={() => navigate(`/${item.id}`)}
     >
-      <Flex flex={1}>
+      <Flex flex={1} h={[200, "100%"]}>
         <Image src={item?.images[0]} alt="image" w={"100%"} borderRadius={15} />
       </Flex>
       <Flex flexDir={"column"} flex={2} justify={"space-between"}>
@@ -53,8 +53,20 @@ const Card = ({ item }) => {
             colorScheme="orange"
             align={"center"}
           >
-            <TagLeftIcon boxSize="15px" as={BiDollar} />
-            <TagLabel>{item.price}</TagLabel>
+            {/* <TagLeftIcon boxSize="15px" as={BiDollar} /> */}
+            <TagLabel>
+              {" "}
+              {/* {item.postDetail?.income ? item.postDetail.income : "£"}{" "} */}
+              {item.postDetail?.income === "₦"
+                ? new Intl.NumberFormat("en-NG", {
+                    style: "currency",
+                    currency: "NGN",
+                  }).format(item.price)
+                : new Intl.NumberFormat("en-GB", {
+                    style: "currency",
+                    currency: "GBP",
+                  }).format(item.price)}
+            </TagLabel>
           </Tag>
         </Flex>
         <Flex justify={"space-between"} align={"center"}>

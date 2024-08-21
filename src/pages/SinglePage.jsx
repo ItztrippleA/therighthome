@@ -64,8 +64,19 @@ const SinglePage = () => {
                   colorScheme="orange"
                   align={"center"}
                 >
-                  <TagLeftIcon boxSize="20px" as={BiDollar} />
-                  <TagLabel>{post.price}</TagLabel>
+                  {/* <TagLeftIcon boxSize="20px" as={BiDollar} /> */}
+                  <TagLabel>
+                    {" "}
+                    {post.postDetail?.income === "₦"
+                      ? new Intl.NumberFormat("en-NG", {
+                          style: "currency",
+                          currency: "NGN",
+                        }).format(post.price)
+                      : new Intl.NumberFormat("en-GB", {
+                          style: "currency",
+                          currency: "GBP",
+                        }).format(post.price)}
+                  </TagLabel>
                 </Tag>
               </Flex>
             </Flex>

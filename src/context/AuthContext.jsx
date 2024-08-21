@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }) => {
     const {
       type = "",
       city = "",
-      country = "",
+      country = query.country == "" ? country : query.country,
       minPrice = 0,
       maxPrice = 0,
       property = "",

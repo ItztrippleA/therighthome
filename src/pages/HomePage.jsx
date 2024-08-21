@@ -7,7 +7,10 @@ import Value from "./../components/Value/Value";
 import Contact from "./../components/Contact/Contact";
 import GetStarted from "./../components/GetStarted/GetStarted";
 import Footer from "./../components/Footer/Footer";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 const HomePage = () => {
+  const { query, country } = useContext(AuthContext);
   return (
     <Flex direction="column" flex={1} position={"relative"} overflow-x={"clip"}>
       <>
@@ -22,7 +25,7 @@ const HomePage = () => {
         <Hero />
       </>
       {/* <Companies /> */}
-      <Residences />
+      {country !== "" && <Residences />}
       <Value />
       <Contact />
       <GetStarted />

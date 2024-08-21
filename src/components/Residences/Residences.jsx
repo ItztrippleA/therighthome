@@ -8,13 +8,13 @@ import { useContext, useEffect } from "react";
 
 const Residences = () => {
   const data = listData;
-  const { posts, fetchPosts } = useContext(AuthContext);
+  const { posts, fetchPosts, country } = useContext(AuthContext);
 
   useEffect(() => {
     const initialQuery = {
       type: "",
       city: "",
-      country: "",
+      country: country,
       minPrice: 0,
       maxPrice: 0,
       property: "",
@@ -95,7 +95,18 @@ const Residences = () => {
                   />
                   <Flex fontSize={"1.2rem"} fontWeight={"600"}>
                     <Text color={"orange"}>£</Text>
-                    <Text>{card.price}</Text>
+                    <Text>
+                      {" "}
+                      {card.postDetail?.income === "₦"
+                        ? new Intl.NumberFormat("en-NG", {
+                            style: "currency",
+                            currency: "NGN",
+                          }).format(card.price)
+                        : new Intl.NumberFormat("en-GB", {
+                            style: "currency",
+                            currency: "GBP",
+                          }).format(card.price)}
+                    </Text>
                   </Flex>
                   <Text className="primaryText" fontSize={"1.2rem"}>
                     {card.title.length > 15
