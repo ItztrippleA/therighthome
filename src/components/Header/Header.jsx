@@ -23,7 +23,7 @@ import { AuthContext } from "../../context/AuthContext";
 const Header = () => {
   const isMobile = useMediaQuery({ query: `(max-width: 768px)` });
   const navigate = useNavigate();
-  const { user, onOpen, onOpenReg } = useContext(AuthContext);
+  const { user, onOpen, onOpenReg, country } = useContext(AuthContext);
   const {
     isOpen: isOpenMenu,
     onOpen: onOpenMenu,
@@ -49,9 +49,11 @@ const Header = () => {
         />
         {!isMobile ? (
           <Flex gap={"2rem"} align={"center"} color={"white"}>
-            <Link href="/list">
-              <Text fontSize="md">Residences</Text>
-            </Link>
+            {/* {country && (
+              <Link href="/list">
+                <Text fontSize="md">Residences</Text>
+              </Link>
+            )} */}
             <Link href="#">
               <Text fontSize="md">Our Vision</Text>
             </Link>
@@ -117,9 +119,11 @@ const Header = () => {
                 <Link href="/">
                   <Heading color={"#fff"}>Home</Heading>
                 </Link>
-                <Link href="/list">
-                  <Heading color={"#fff"}>Residence</Heading>
-                </Link>
+                {/* {country && (
+                  <Link href="/list">
+                    <Heading color={"#fff"}>Residence</Heading>
+                  </Link>
+                )} */}
                 {user ? (
                   <Link href="/profile">
                     <Heading color={"#fff"}>Profile</Heading>

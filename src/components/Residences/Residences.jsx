@@ -94,7 +94,7 @@ const Residences = () => {
                     h={"150px"}
                   />
                   <Flex fontSize={"1.2rem"} fontWeight={"600"}>
-                    <Text color={"orange"}>£</Text>
+                    {/* <Text color={"orange"}>£</Text> */}
                     <Text>
                       {" "}
                       {card.postDetail?.income === "₦"
