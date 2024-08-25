@@ -485,7 +485,14 @@ const MembershipModal = ({ isOpen, onClose: oncloseMod }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Flex bgColor="#ff922d" mr={3} p={3} borderRadius={15} color={"#fff"}>
+          <Flex
+            bgColor="#ff922d"
+            mr={3}
+            p={3}
+            borderRadius={15}
+            color={"#fff"}
+            onClick={() => oncloseMod()}
+          >
             <PaystackButton {...componentProps} />
           </Flex>
           <Button colorScheme="blackAlpha" mr={3} onClick={oncloseMod}>

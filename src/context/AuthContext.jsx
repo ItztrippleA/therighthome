@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }) => {
     // if (!validateInputs()) {
     //   return;
     // }
-
+    // console.log(email, password);
     setLoading(true);
     fetch(`${BASE_URL}/api/auth/login`, {
       method: "POST",
@@ -441,7 +441,10 @@ export const AuthProvider = ({ children }) => {
                 ref={initialRef}
                 placeholder="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  console.log("Email input value:", e.target.value);
+                  setEmail(e.target.value);
+                }}
               />
             </FormControl>
 
