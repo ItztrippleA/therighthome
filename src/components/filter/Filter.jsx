@@ -4,7 +4,6 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Input,
   Select,
   NumberInput,
   NumberInputField,
@@ -16,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import GooglePlacesAutocomplete from "../../pages/GooglePlacesAutocomplete";
 
 const Filter = ({ onSearch }) => {
   const navigate = useNavigate();
@@ -23,7 +23,8 @@ const Filter = ({ onSearch }) => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
 
   const defaultQuery = {
-    location: "",
+    city: "",
+    country: "",
     type: "",
     property: "",
     minPrice: 0,
@@ -37,7 +38,8 @@ const Filter = ({ onSearch }) => {
     const hasParams = Array.from(params.keys()).length > 0;
 
     const initialQuery = {
-      location: params.get("city") || defaultQuery.location,
+      city: params.get("city") || defaultQuery.city,
+      country: params.get("country") || defaultQuery.country,
       type: params.get("type") || defaultQuery.type,
       property: params.get("property") || defaultQuery.property,
       minPrice: parseInt(params.get("minPrice") || defaultQuery.minPrice),
@@ -54,6 +56,11 @@ const Filter = ({ onSearch }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(query).toString();
+    navigate(`/list?${queryParams}`, { replace: true });
+  }, [query, navigate]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setQuery((prev) => ({ ...prev, [name]: value }));
@@ -64,9 +71,15 @@ const Filter = ({ onSearch }) => {
   };
 
   const handleSearch = () => {
-    const queryParams = new URLSearchParams(query).toString();
-    navigate(`/list?${queryParams}`);
     onSearch(query); // Fetch posts with current query
+  };
+
+  const handleLocationChange = (newLocation) => {
+    setQuery((prev) => ({
+      ...prev,
+      city: newLocation.city,
+      country: newLocation.country,
+    }));
   };
 
   return (
@@ -78,14 +91,12 @@ const Filter = ({ onSearch }) => {
       <Flex gap={5} flexDir={"column"}>
         <FormControl mt={10}>
           <FormLabel>Location</FormLabel>
-          <Input
-            type="text"
-            id="location"
-            name="location"
-            value={query.location}
-            onChange={handleInputChange}
-            placeholder="city location"
-          />
+          <Box border="1px solid grey" borderRadius="md">
+            <GooglePlacesAutocomplete
+              setQuery={handleLocationChange}
+              query={query}
+            />
+          </Box>
         </FormControl>
         <Flex gap={3} align={"center"} flexDir={["column", "row"]}>
           <Select
@@ -101,17 +112,6 @@ const Filter = ({ onSearch }) => {
             <option value="distress">Distress</option>
             <option value="hotel">Hotel</option>
           </Select>
-          {/* <Select
-            placeholder="Property"
-            name="property"
-            value={query.property}
-            onChange={handleInputChange}
-            flex={1}
-          >
-            <option value="house">House</option>
-            <option value="apartment">Apartment</option>
-            <option value="condo">Condo</option>
-          </Select> */}
           <NumberInput
             max={1000000}
             min={0}

@@ -54,11 +54,8 @@ const Residences = () => {
         <Box w={"100%"} pb={10}>
           <Swiper
             spaceBetween={50}
-            slidesPerView={5}
+            slidesPerView={1}
             breakpoints={{
-              400: {
-                slidesPerView: 1,
-              },
               600: {
                 slidesPerView: 2,
               },
@@ -80,8 +77,8 @@ const Residences = () => {
                   flexDirection={"column"}
                   gap={"0.6rem"}
                   borderRadius={"10px"}
-                  // maxW={"max-content"}
                   margin={"auto"}
+                  w={["100%", 200]}
                   p={"1rem"}
                   transition={"all 300ms ease-in"}
                   className="r-card"
@@ -90,13 +87,11 @@ const Residences = () => {
                     src={card.images[0]}
                     alt="home"
                     w={"100%"}
-                    // maxW={"15rem"}
                     h={"150px"}
+                    objectFit={"cover"}
                   />
                   <Flex fontSize={"1.2rem"} fontWeight={"600"}>
-                    {/* <Text color={"orange"}>£</Text> */}
                     <Text>
-                      {" "}
                       {card.postDetail?.income === "₦"
                         ? new Intl.NumberFormat("en-NG", {
                             style: "currency",

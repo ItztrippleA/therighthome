@@ -30,7 +30,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
-const MembershipModal = ({ isOpen, onClose: oncloseMod }) => {
+const MembershipModal = ({ isOpen, onClose: oncloseMod, checkMembership }) => {
   const stripe = useStripe();
   const elements = useElements();
   const CARD_ELEMENT_OPTIONS = {
@@ -120,6 +120,10 @@ const MembershipModal = ({ isOpen, onClose: oncloseMod }) => {
     // Additional logic after success
   };
 
+  const handlePaystackSuccessActionWebhook = (reference) => {
+    checkMembership();
+  };
+
   const handlePaystackCloseAction = () => {
     // Implementation for whatever you want to do when the Paystack dialog is closed.
     alert("payment closed");
@@ -131,12 +135,26 @@ const MembershipModal = ({ isOpen, onClose: oncloseMod }) => {
     email: user.email,
     amount: naira * 100, // Convert to Kobo
     publicKey: PAYSTACK_KEY,
+    metadata: {
+      userId: user.id, // assuming you have user ID
+      promotionType: property.postData.promotionType,
+      duration:
+        selectedPlan === "Premium Platinum"
+          ? 90
+          : selectedPlan === "Premium Gold"
+          ? 30
+          : 30,
+    },
   };
 
   const componentProps = {
     ...config,
     text: "Pay with Paystack",
-    onSuccess: (ref) => handlePaystackSuccessAction(ref.reference),
+    onSuccess: (ref) => {
+      property.postData.promotionType == "PostOnce"
+        ? handlePaystackSuccessAction(ref.reference)
+        : handlePaystackSuccessActionWebhook(ref.reference);
+    },
     onClose: handlePaystackCloseAction,
   };
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
 import Filter from "../components/filter/Filter";
 import Card from "../components/Card/Card";
@@ -11,6 +11,13 @@ const ListPage = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const location = useLocation();
 
+  const memoizedFetchPosts = useCallback(
+    (query) => {
+      fetchPosts(query);
+    },
+    [fetchPosts]
+  );
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const initialQuery = {
@@ -21,38 +28,36 @@ const ListPage = () => {
       maxPrice: params.get("maxPrice") || 0,
       property: params.get("property") || "",
     };
-    fetchPosts(initialQuery);
-  }, []);
-
-  const handleSearch = (query) => {
-    fetchPosts(query);
-  };
+    memoizedFetchPosts(initialQuery);
+  }, [location.search, memoizedFetchPosts]);
 
   return (
     <Flex
-      justify={"center"}
+      justify="center"
       pb={["1rem", "3rem"]}
       pt={["3rem", "0rem"]}
-      bg={"#fff"}
-      w={"100%"}
+      bg="#fff"
+      w="100%"
     >
       <Flex
-        justify={"space-between"}
+        justify="space-between"
         direction={{ base: "column", md: "row" }}
         w={["90%", "75%"]}
         gap={10}
       >
-        <Box flex={3}>
-          <Filter onSearch={handleSearch} />
-          <Flex gap={5} flexDir={"column"} mt={10}>
+        <Box flex={4}>
+          <Filter onSearch={memoizedFetchPosts} />
+          <Flex gap={5} flexDir="column" mt={10}>
             {posts.map((item) => (
-              <Card key={item.id} item={item} />
+              <Card key={item._id} item={item} />
             ))}
           </Flex>
         </Box>
-        <Flex flex={2} pt={20} h={1000}>
-          {isDesktop && <Map data={posts} />}
-        </Flex>
+        {isDesktop && (
+          <Flex flex={2} pt={20} h={1000}>
+            <Map data={posts} />
+          </Flex>
+        )}
       </Flex>
     </Flex>
   );

@@ -7,8 +7,9 @@ import {
   TagLabel,
   TagLeftIcon,
   Text,
+  IconButton,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   BiBath,
   BiBed,
@@ -17,11 +18,58 @@ import {
   BiLocationPlus,
 } from "react-icons/bi";
 import { CiHeart } from "react-icons/ci";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { BASE_URL } from "../../Environment";
 
 const Card = ({ item }) => {
   const navigate = useNavigate();
-  // console.log(item);
+  const { user, fetchPosts } = useContext(AuthContext);
+  const [isSaved, setIsSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Check if the item is saved when the component mounts
+    setIsSaved(item.isSaved);
+  }, [item.isSaved]);
+
+  const handleSave = async (e) => {
+    e.stopPropagation(); // Prevent navigation when clicking the heart icon
+    if (!user) {
+      alert("Please login to save properties");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/api/users/save`, {
+        method: "POST",
+        body: JSON.stringify({
+          postId: item.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const responseJson = await response.json();
+
+      if (responseJson.success) {
+        setIsSaved(!isSaved);
+        alert(responseJson.message);
+        fetchPosts(); // Refresh the posts to update the UI
+      } else {
+        alert(`Error: ${responseJson.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred while saving the property");
+      console.error(`Save error: ${error}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Flex
       p={3}
@@ -84,10 +132,14 @@ const Card = ({ item }) => {
               <TagLabel>{item.size}</TagLabel>
             </Tag>
           </Flex>
-          <Flex gap={5}>
-            <CiHeart size="35px" />
-            {/* <CiHeart size="35px" /> */}
-          </Flex>
+          <IconButton
+            icon={isSaved ? <FaHeart color="orange" /> : <CiHeart />}
+            onClick={handleSave}
+            isLoading={loading}
+            variant="ghost"
+            aria-label={isSaved ? "Unsave property" : "Save property"}
+            size="lg"
+          />
         </Flex>
       </Flex>
     </Flex>

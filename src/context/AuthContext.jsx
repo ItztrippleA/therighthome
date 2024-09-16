@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useCallback } from "react";
 import { BASE_URL } from "../Environment";
 import {
   Button,
@@ -119,89 +119,86 @@ export const AuthProvider = ({ children }) => {
     },
   });
 
-  const fetchPosts = async (query) => {
-    setLoading(true);
-    setRefreshing(true);
-    const {
-      type = "",
-      city = "",
-      country = query.country == "" ? country : query.country,
-      minPrice = 0,
-      maxPrice = 0,
-      property = "",
-    } = query;
-    // console.log({ type, city, country, minPrice, maxPrice, property });
+  const fetchPosts = useCallback(
+    async (query) => {
+      setLoading(true);
+      setRefreshing(true);
+      setPosts([]); // Set posts to empty array first
+      const {
+        type = "",
+        city = "",
+        country = query.country == "" ? country : query.country,
+        minPrice = 0,
+        maxPrice = 0,
+        property = "",
+      } = query;
+      // console.log({ type, city, country, minPrice, maxPrice, property });
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
+      const headers = {
+        "Content-Type": "application/json",
+      };
 
-    if (user?.token) {
-      headers["Authorization"] = `Bearer ${user.token}`;
-    }
-
-    fetch(
-      `${BASE_URL}/api/posts?type=${type}&city=${city}&country=${country}&minPrice=${minPrice}&maxPrice=${maxPrice}&property=${property}`,
-      {
-        method: "GET",
-        headers: headers,
+      if (user?.token) {
+        headers["Authorization"] = `Bearer ${user.token}`;
       }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // console.log(responseJson);
+
+      try {
+        const response = await fetch(
+          `${BASE_URL}/api/posts?type=${type}&city=${city}&country=${country}&minPrice=${minPrice}&maxPrice=${maxPrice}&property=${property}`,
+          {
+            method: "GET",
+            headers: headers,
+          }
+        );
+        const responseJson = await response.json();
         if (responseJson.success) {
           setPosts(responseJson.data);
-          setLoading(false);
-          setRefreshing(false);
         } else {
           alert(responseJson.message);
-          setLoading(false);
-          setRefreshing(false);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
+      } finally {
         setLoading(false);
         setRefreshing(false);
-      });
-  };
+      }
+    },
+    [user, country]
+  );
 
-  const fetchPost = async (id) => {
-    setLoading(true);
-    setRefreshing(true);
+  const fetchPost = useCallback(
+    async (id) => {
+      setLoading(true);
+      setRefreshing(true);
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
+      const headers = {
+        "Content-Type": "application/json",
+      };
 
-    if (user?.token) {
-      headers["Authorization"] = `Bearer ${user.token}`;
-    }
+      if (user?.token) {
+        headers["Authorization"] = `Bearer ${user.token}`;
+      }
 
-    fetch(`${BASE_URL}/api/posts/${id}`, {
-      method: "GET",
-      // headers: headers,
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // console.log(responseJson);
+      try {
+        const response = await fetch(`${BASE_URL}/api/posts/${id}`, {
+          method: "GET",
+          // headers: headers,
+        });
+        const responseJson = await response.json();
         if (responseJson.success) {
           setPost(responseJson.data);
-          setLoading(false);
-          setRefreshing(false);
         } else {
           alert(responseJson.message);
-          setLoading(false);
-          setRefreshing(false);
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
+      } finally {
         setLoading(false);
         setRefreshing(false);
-      });
-  };
+      }
+    },
+    [user]
+  );
 
   const signIn = () => {
     // if (!validateInputs()) {
@@ -384,6 +381,36 @@ export const AuthProvider = ({ children }) => {
 
     getLocation();
   }, []);
+  //a function to forget password
+  const forgetPassword = () => {
+    if (!email) {
+      alert("Please enter your email address");
+      return;
+    }
+    setLoading(true);
+    fetch(`${BASE_URL}/api/auth/forget-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setLoading(false);
+        if (responseJson.success) {
+          alert("Password reset instructions have been sent to your email");
+          onClose();
+        } else {
+          alert(responseJson.message || "An error occurred");
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error("Forget password error:", error);
+        alert("An error occurred while processing your request");
+      });
+  };
 
   return (
     <AuthContext.Provider

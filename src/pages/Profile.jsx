@@ -644,6 +644,7 @@ const Profile = () => {
 
       <MembershipModal
         isOpen={isModalOpen}
+        checkMembership={checkMembership}
         onClose={() => setIsModalOpen(false)}
       />
       <MembershipModalUk

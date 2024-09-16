@@ -42,7 +42,7 @@ const Contact = () => {
               flexDir={["column", "row"]}
               gap={"1.5rem"}
             >
-              <Flex w="100%" flexDir={"column"} gap={"1rem"}>
+              <Flex flexDir={"column"} gap={"1rem"}>
                 {/* Call Section */}
                 <Flex
                   flexDir={"column"}
@@ -54,7 +54,7 @@ const Contact = () => {
                   gap={"1rem"}
                   transition={"all 300ms ease-in"}
                   cursor={"pointer"}
-                  className="mode"
+                  // className="mode"
                 >
                   <Flex flexDir={"row"} gap={"1.6rem"} w={"100%"}>
                     <Flex
@@ -69,7 +69,7 @@ const Contact = () => {
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
                         Call
                       </Text>
-                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
+                      <Text fontSize={"1.1rem"}>+447853734503</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
@@ -123,7 +123,7 @@ const Contact = () => {
                       <Text fontSize={"1.1rem"} fontWeight={"600"}>
                         Chat
                       </Text>
-                      <Text fontSize={"1.1rem"}>+44 7853734503</Text>
+                      <Text fontSize={"1.1rem"}>+447853734503</Text>
                     </Flex>
                   </Flex>
                   <Flex justify={"center"} w={"100%"}>
@@ -147,7 +147,7 @@ const Contact = () => {
                 </Flex>
               </Flex>
               {/* //here */}
-              <Flex w="100%" flexDir={"column"} gap={"1rem"}>
+              <Flex flexDir={"column"} gap={"1rem"}>
                 <Flex
                   flexDir={"column"}
                   justify={"flex-start"}
@@ -158,7 +158,7 @@ const Contact = () => {
                   gap={"1rem"}
                   transition={"all 300ms ease-in"}
                   cursor={"pointer"}
-                  className="mode"
+                  // className="mode"
                 >
                   <Flex flexDir={"row"} gap={"1.6rem"} w={"100%"}>
                     <Flex

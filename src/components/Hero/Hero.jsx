@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Flex,
   Text,
@@ -23,6 +23,14 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
@@ -35,6 +43,12 @@ import GooglePlacesAutocomplete from "../../pages/GooglePlacesAutocomplete";
 const Hero = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    console.log("BASE_URL from .env:", import.meta.env.VITE_PAYSTACK_KEY);
+  }, []);
 
   const { user, posts, setPosts, setLoading, setRefreshing, query, setQuery } =
     useContext(AuthContext);
@@ -68,13 +82,16 @@ const Hero = () => {
         if (responseJson.success) {
           setPosts(responseJson.data);
         } else {
-          alert(responseJson.message);
+          setErrorMessage(responseJson.message);
+          onOpen();
         }
         setLoading(false);
         setRefreshing(false);
       })
       .catch((error) => {
         console.error(error);
+        setErrorMessage("An error occurred while fetching posts.");
+        onOpen();
         setLoading(false);
         setRefreshing(false);
       });
@@ -134,113 +151,91 @@ const Hero = () => {
             </Text>
           </Box>
 
-          <Flex flexDir={"column"}>
-            <Flex>
-              <Button
-                colorScheme="orange"
-                variant={query.type === "sale" ? "solid" : "outline"}
-                size={"lg"}
-                onClick={() => switchType("sale")}
-              >
-                Buy
-              </Button>
-              <Button
-                colorScheme="orange"
-                variant={query.type === "rent" ? "solid" : "outline"}
-                size={"lg"}
-                onClick={() => switchType("rent")}
-              >
-                Rent
-              </Button>
-              <Button
-                colorScheme="orange"
-                variant={query.type === "shared" ? "solid" : "outline"}
-                size={"lg"}
-                onClick={() => switchType("shared")}
-              >
-                Shared
-              </Button>
+          <Flex flexDir="column" gap={4}>
+            <Flex gap={2}>
+              {["sale", "rent", "shared"].map((type) => (
+                <Button
+                  key={type}
+                  colorScheme="orange"
+                  variant={query.type === type ? "solid" : "outline"}
+                  size="lg"
+                  onClick={() => switchType(type)}
+                >
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </Button>
+              ))}
             </Flex>
             <Flex
-              bg={"#fff"}
-              borderRadius={"5px"}
-              border={"3px solid #1f3e72"}
-              p={"0.5rem 1rem"}
-              justify={"space-between"}
-              align={"center"}
+              bg="white"
+              borderRadius="5px"
+              border="3px solid #1f3e72"
+              p="0.5rem 1rem"
+              justify="space-between"
+              align="center"
               flexDir={["column", "row"]}
               gap={3}
-              w={"100%"}
-              flex={1}
+              w="100%"
             >
-              <Flex align={"center"} flexDir={["column", "row"]}>
-                {isDesktop && (
-                  <HiLocationMarker color="#1f3e72" size={25} flex={1} />
-                )}
+              <Flex align="center" flexDir={["column", "row"]} flex={1}>
+                {isDesktop && <HiLocationMarker color="#1f3e72" size={25} />}
                 <GooglePlacesAutocomplete setQuery={setQuery} query={query} />
               </Flex>
             </Flex>
             <Flex
-              bg={"#fff"}
-              borderRadius={"5px"}
-              border={"3px solid #1f3e72"}
-              p={"0.5rem 1rem"}
-              justify={"space-between"}
-              align={"center"}
+              bg="white"
+              borderRadius="5px"
+              border="3px solid #1f3e72"
+              p="0.5rem 1rem"
+              justify="space-between"
+              align="center"
               flexDir={["column", "row"]}
               gap={3}
-              w={"100%"}
-              flex={1}
+              w="100%"
             >
-              <Flex align={"center"} flexDir={["column", "row"]}>
-                {/* {isDesktop && (
-                  <HiLocationMarker color="#1f3e72" size={25} flex={1} />
-                )} */}
-                <NumberInput
-                  maxW={[32]}
-                  min={0}
-                  color={"black"}
-                  onChange={(value) =>
-                    setQuery((prev) => ({ ...prev, minPrice: value }))
-                  }
-                >
-                  <NumberInputField
-                    placeholder="Min price"
-                    flex={1}
-                    name="minPrice"
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                <NumberInput
-                  maxW={32}
-                  min={0}
-                  color={"black"}
-                  onChange={(value) =>
-                    setQuery((prev) => ({ ...prev, maxPrice: value }))
-                  }
-                >
-                  <NumberInputField
-                    placeholder="Max price"
-                    flex={1}
-                    name="maxPrice"
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+              <Flex
+                align="center"
+                flexDir={["column", "row"]}
+                flex={1}
+                gap={2}
+                w={["100%", "auto"]}
+              >
+                {["minPrice", "maxPrice"].map((price) => (
+                  <NumberInput
+                    key={price}
+                    maxW={["100%", 32]}
+                    min={0}
+                    color="black"
+                    onChange={(value) =>
+                      setQuery((prev) => ({ ...prev, [price]: value }))
+                    }
+                    w={["100%", "auto"]}
+                  >
+                    <NumberInputField
+                      placeholder={`${
+                        price === "minPrice" ? "Min" : "Max"
+                      } price`}
+                      name={price}
+                    />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                ))}
               </Flex>
-
               <IconButton
                 colorScheme="orange"
                 aria-label="Search"
                 size="lg"
                 onClick={() => {
-                  if (query.country == "") {
-                    alert("Kindly select a location");
+                  if (query.type === "") {
+                    setErrorMessage(
+                      "Please select a property type (sale, rent, or shared)"
+                    );
+                    onOpen();
+                  } else if (query.country === "") {
+                    setErrorMessage("Kindly select a location");
+                    onOpen();
                   } else {
                     const queryParams = new URLSearchParams(query).toString();
                     navigate(`/list?${queryParams}`);
@@ -248,11 +243,12 @@ const Hero = () => {
                   }
                 }}
                 icon={<SearchIcon />}
+                w={["100%", "auto"]}
               />
             </Flex>
           </Flex>
 
-          <Flex justify={"space-between"} w={["100%", "70%"]}>
+          {/* <Flex justify={"space-between"} w={["100%", "70%"]}>
             <Flex align={"center"} flexDirection={"column"}>
               <Flex align={"center"}>
                 <CountUp
@@ -285,22 +281,7 @@ const Hero = () => {
                 Happy Customers
               </Text>
             </Flex>
-            {/* <Flex align={"center"} flexDirection={"column"}>
-              <Flex align={"center"}>
-                <CountUp
-                  end={28}
-                  duration={4}
-                  style={{ color: "#fff", fontSize: "2rem" }}
-                />
-                <Text fontSize={"1.5rem"} color={"orange"} fontWeight={"600"}>
-                  +
-                </Text>
-              </Flex>
-              <Text fontSize={".9rem"} color={"rgba(140 139 139)"}>
-                Award Winnings
-              </Text>
-            </Flex> */}
-          </Flex>
+          </Flex> */}
         </Flex>
         <Flex justify={"center"} align={"center"}>
           <Flex
@@ -316,6 +297,22 @@ const Hero = () => {
           </Flex>
         </Flex>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Error</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>{errorMessage}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };
