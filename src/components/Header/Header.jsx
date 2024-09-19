@@ -54,9 +54,9 @@ const Header = () => {
                 <Text fontSize="md">Residences</Text>
               </Link>
             )} */}
-            <Link href="#">
+            {/* <Link href="#">
               <Text fontSize="md">Our Vision</Text>
-            </Link>
+            </Link> */}
             {user ? (
               <Avatar
                 name={`${user.firstname} ${user.lastname}`}
@@ -138,9 +138,9 @@ const Header = () => {
                     </Heading>
                   </>
                 )}
-                <Link href="/">
+                {/* <Link href="/">
                   <Heading color={"#fff"}>Our Vision</Heading>
-                </Link>
+                </Link> */}
 
                 <Link href={"/about"}>
                   <Heading color={"#fff"}>About us</Heading>
