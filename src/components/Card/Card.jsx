@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../Environment";
 
-const Card = ({ item }) => {
+const Card = ({ item, isMyList }) => {
   const navigate = useNavigate();
   const { user, fetchPosts } = useContext(AuthContext);
   const [isSaved, setIsSaved] = useState(false);
@@ -70,6 +70,14 @@ const Card = ({ item }) => {
     }
   };
 
+  const handleCardClick = () => {
+    if (isMyList) {
+      navigate(`/edit/${item.id}`);
+    } else {
+      navigate(`/${item.id}`);
+    }
+  };
+
   return (
     <Flex
       p={3}
@@ -77,10 +85,21 @@ const Card = ({ item }) => {
       h={[370, 200]}
       cursor={"pointer"}
       flexDir={["column", "row"]}
-      onClick={() => navigate(`/${item.id}`)}
+      onClick={handleCardClick}
     >
-      <Flex flex={1} h={[200, "100%"]}>
+      <Flex flex={1} h={[200, "100%"]} position="relative">
         <Image src={item?.images[0]} alt="image" w={"100%"} borderRadius={15} />
+        <Tag
+          position="absolute"
+          top={2}
+          left={2}
+          size="sm"
+          variant="solid"
+          colorScheme="gray"
+          opacity={0.7}
+        >
+          {item.property}
+        </Tag>
       </Flex>
       <Flex flexDir={"column"} flex={2} justify={"space-between"}>
         <Heading size={["sm", "md"]}>
@@ -101,10 +120,7 @@ const Card = ({ item }) => {
             colorScheme="orange"
             align={"center"}
           >
-            {/* <TagLeftIcon boxSize="15px" as={BiDollar} /> */}
             <TagLabel>
-              {" "}
-              {/* {item.postDetail?.income ? item.postDetail.income : "£"}{" "} */}
               {item.postDetail?.income === "₦"
                 ? new Intl.NumberFormat("en-NG", {
                     style: "currency",
@@ -119,14 +135,18 @@ const Card = ({ item }) => {
         </Flex>
         <Flex justify={"space-between"} align={"center"}>
           <Flex gap={3}>
-            <Tag size={"md"} variant="subtle" colorScheme="cyan">
-              <TagLeftIcon boxSize="12px" as={BiBed} />
-              <TagLabel>{item.bedroom} </TagLabel>
-            </Tag>
-            <Tag size={"md"} variant="subtle" colorScheme="cyan">
-              <TagLeftIcon boxSize="12px" as={BiBath} />
-              <TagLabel>{item.bathroom} </TagLabel>
-            </Tag>
+            {item.property !== "land" && (
+              <>
+                <Tag size={"md"} variant="subtle" colorScheme="cyan">
+                  <TagLeftIcon boxSize="12px" as={BiBed} />
+                  <TagLabel>{item.bedroom} </TagLabel>
+                </Tag>
+                <Tag size={"md"} variant="subtle" colorScheme="cyan">
+                  <TagLeftIcon boxSize="12px" as={BiBath} />
+                  <TagLabel>{item.bathroom} </TagLabel>
+                </Tag>
+              </>
+            )}
             <Tag size={"md"} variant="subtle" colorScheme="cyan">
               <TagLeftIcon boxSize="12px" as={BiFullscreen} />
               <TagLabel>{item.size}</TagLabel>

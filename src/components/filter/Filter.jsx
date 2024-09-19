@@ -75,11 +75,16 @@ const Filter = ({ onSearch }) => {
   };
 
   const handleLocationChange = (newLocation) => {
-    setQuery((prev) => ({
-      ...prev,
+    const updatedQuery = {
+      ...query,
       city: newLocation.city,
       country: newLocation.country,
-    }));
+    };
+    setQuery(updatedQuery);
+
+    // Update URL immediately when location changes
+    const queryParams = new URLSearchParams(updatedQuery).toString();
+    navigate(`/list?${queryParams}`, { replace: true });
   };
 
   return (

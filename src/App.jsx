@@ -8,6 +8,7 @@ import ListPage from "./pages/ListPage";
 import SinglePage from "./pages/SinglePage";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import EditPost from "./pages/EditPost"; // Import the new EditPost component
 // import "dotenv/config";
 import { useCallback, useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
@@ -33,6 +34,11 @@ function App() {
           <Route path="/termsandcondition" element={<TermsandCondition />} />
           <Route path="/profile" element={user ? <Profile /> : <HomePage />} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+          <Route
+            path="/edit/:id"
+            element={user ? <EditPost /> : <HomePage />}
+          />{" "}
+          {/* New route for editing posts */}
         </Routes>
         <Footer />
       </LoadScript>

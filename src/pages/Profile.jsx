@@ -28,6 +28,13 @@ import {
   MenuOptionGroup,
   MenuDivider,
   Textarea,
+  Badge,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { AuthContext } from "../context/AuthContext";
 import { BASE_URL } from "../Environment";
@@ -45,6 +52,7 @@ import { MdPictureAsPdf, MdPictureInPicture } from "react-icons/md";
 import UploadWidget from "../components/UploadWidget/UploadWidget";
 import MembershipModal from "./MembershipModal";
 import MembershipModalUk from "./MembershipModalUk";
+
 const Profile = () => {
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const {
@@ -74,7 +82,19 @@ const Profile = () => {
   const [selectedFaciItems, setSelectedFaciItems] = useState([]);
   const [images, setImages] = useState([]);
   const [posts, setPosts] = useState([]);
-  // console.log(images);
+  const [wishlist, setWishlist] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const {
+    isOpen: isErrorOpen,
+    onOpen: onErrorOpen,
+    onClose: onErrorClose,
+  } = useDisclosure();
+  const {
+    isOpen: isSuccessOpen,
+    onOpen: onSuccessOpen,
+    onClose: onSuccessClose,
+  } = useDisclosure();
+
   const handleMenuChange = (values) => {
     setSelectedFaciItems(values);
     setProperty((prevState) => ({
@@ -86,7 +106,6 @@ const Profile = () => {
     }));
   };
   const handleSelect = (value) => {
-    // console.log(value === "Yes");
     setProperty((prevState) => ({
       ...prevState,
       postData: {
@@ -106,7 +125,6 @@ const Profile = () => {
     }));
   };
   const handleSelectFur = (value) => {
-    // console.log(value);
     setProperty((prevState) => ({
       ...prevState,
       postData: {
@@ -171,9 +189,51 @@ const Profile = () => {
     if (selectedFaciItems.length < 1) missingFields.push("atleast 1 Facility");
 
     if (missingFields.length > 0) {
-      alert(
+      setErrorMessage(
         `Please fill in the following fields:\n${missingFields.join(", ")}`
       );
+      onErrorOpen();
+      return false;
+    }
+
+    return true;
+  };
+  const validateFormLand = () => {
+    const {
+      type,
+      address,
+      title,
+      size,
+      // parking,
+      description,
+      price,
+      listedBy,
+      name,
+      phoneNumber,
+    } = property.postData;
+
+    const missingFields = [];
+
+    if (!type) missingFields.push("Property Type");
+    if (!address) missingFields.push("Property Location");
+    if (!size) missingFields.push("Property Size");
+    if (!title) missingFields.push("Property Name");
+
+    if (!description) missingFields.push("Description");
+    if (!price) missingFields.push("Price");
+    if (!listedBy) missingFields.push("Listed by");
+    if (!name) missingFields.push("Name");
+    if (!phoneNumber) missingFields.push("Listed by");
+
+    if (images.length < 1) missingFields.push("At least 1 Photo");
+    // if (getSelectedFacilities().length < 1)
+    //   missingFields.push("atleast 1 Facility");
+
+    if (missingFields.length > 0) {
+      setErrorMessage(
+        `Please fill in the following fields:\n${missingFields.join(", ")}`
+      );
+      onErrorOpen();
       return false;
     }
 
@@ -203,11 +263,13 @@ const Profile = () => {
       .then((data) => {
         setPicture(data.secure_url);
         updateImage(data.secure_url);
-        alert("Image upload successful");
+        setErrorMessage("Image upload successful");
+        onErrorOpen();
       })
       .catch((err) => {
         console.error(err);
-        alert("Error while uploading");
+        setErrorMessage("Error while uploading");
+        onErrorOpen();
       });
   };
 
@@ -243,12 +305,14 @@ const Profile = () => {
         setUser(updatedUserData);
         onClose();
       } else {
-        alert(`Error: ${responseJson.message}`);
+        setErrorMessage(`Error: ${responseJson.message}`);
+        onErrorOpen();
         console.error(`Error: ${responseJson}`);
       }
     } catch (error) {
       setLoading(false);
-      alert("Failed to update");
+      setErrorMessage("Failed to update");
+      onErrorOpen();
       console.error(`Update error: ${error}`);
     }
   };
@@ -277,12 +341,14 @@ const Profile = () => {
         localStorage.setItem("user", JSON.stringify(updatedUserData));
         setUser(updatedUserData);
       } else {
-        alert(`Error: ${responseJson.message}`);
+        setErrorMessage(`Error: ${responseJson.message}`);
+        onErrorOpen();
         console.error(`Error: ${responseJson}`);
       }
     } catch (error) {
       setLoading(false);
-      alert("Failed to update");
+      setErrorMessage("Failed to update");
+      onErrorOpen();
       console.error(`Update error: ${error}`);
     }
   };
@@ -306,22 +372,51 @@ const Profile = () => {
         setUser(null);
         navigate("/");
       } else {
-        alert(`Error: ${responseJson.message}`);
+        setErrorMessage(`Error: ${responseJson.message}`);
+        onErrorOpen();
       }
     } catch (error) {
       setLoading(false);
-      alert("Failed to logout");
+      setErrorMessage("Failed to logout");
+      onErrorOpen();
       console.error(`Logout error: ${error}`);
     }
   };
   const handlePlaceSelected = (place) => {
     // console.log("Selected place:", place);
   };
+
+  const handleSelectTaxBand = (band) => {
+    setProperty((prevState) => ({
+      ...prevState,
+      postData: {
+        ...prevState.postData,
+        taxBand: band,
+      },
+    }));
+  };
+  const handleSelectEpcRating = (rating) => {
+    setProperty((prevState) => ({
+      ...prevState,
+      postData: {
+        ...prevState.postData,
+        epcRating: rating,
+      },
+    }));
+  };
   const [selectedItem, setSelectedItem] = useState("sell");
   // console.log(proptypes["sell"]);
   const postProperty = async () => {
-    if (!validateForm()) {
-      return;
+    if (property.postData.property == "land") {
+      if (!validateFormLand()) {
+        setLoading(false);
+        return;
+      }
+    } else {
+      if (!validateForm()) {
+        setLoading(false);
+        return;
+      }
     }
     // console.log("str", {
     //   ...property,
@@ -392,14 +487,17 @@ const Profile = () => {
             },
           });
           onCloseReg();
+          onSuccessOpen();
         } else {
-          alert(`error${responseJson.message}`);
+          setErrorMessage(`error${responseJson.message}`);
+          onErrorOpen();
           // console.log("structure", responseJson);
         }
       })
       .catch((error) => {
         setLoading(false);
-        alert("upload error");
+        setErrorMessage("upload error");
+        onErrorOpen();
         // console.log(`upload error ${error}`);
       });
   };
@@ -408,6 +506,41 @@ const Profile = () => {
     checkMembership();
   }, []);
 
+  useEffect(() => {
+    if (property.postData.property === "land") {
+      // console.log("active", item.tag);
+      setProperty((prevState) => ({
+        ...prevState,
+        postData: {
+          ...prevState.postData,
+          size: 0,
+          bedroom: 0,
+          bathroom: 0,
+          parking: 0,
+        },
+        postDetail: {
+          ...prevState.postDetail,
+          facilities: ["None"],
+        },
+      }));
+    } else {
+      // console.log("none", item.tag);
+      setProperty((prevState) => ({
+        ...prevState,
+        postData: {
+          ...prevState.postData,
+          size: 0,
+          bedroom: 0,
+          bathroom: 0,
+          parking: 0,
+        },
+        postDetail: {
+          ...prevState.postDetail,
+          facilities: [],
+        },
+      }));
+    }
+  }, []);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalUkOpen, setIsModalUkOpen] = useState(false);
   const checkMembership = async () => {
@@ -431,7 +564,8 @@ const Profile = () => {
           setLoading(false);
           //   setRefreshing(false);
         } else {
-          alert(responseJson.message);
+          setErrorMessage(responseJson.message);
+          onErrorOpen();
           setLoading(false);
           //   setRefreshing(false);
         }
@@ -454,12 +588,14 @@ const Profile = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        // console.log("pers Item", responseJson);
+        console.log("pers Item", responseJson);
         if (responseJson.success) {
           setPosts(responseJson.userPosts);
+          setWishlist(responseJson.savedPosts);
           setLoading(false);
         } else {
-          alert(responseJson.message);
+          setErrorMessage(responseJson.message);
+          onErrorOpen();
           setLoading(false);
         }
       })
@@ -469,6 +605,7 @@ const Profile = () => {
         setRefreshing(false);
       });
   };
+
   const {
     isOpen: isOpenCountry,
     onOpen: onOpenCOuntry,
@@ -547,11 +684,20 @@ const Profile = () => {
           </Flex>
           <Flex gap={5} flexDir="column" mt={10}>
             {posts.map((item) => (
-              <Card key={item.id} item={item} />
+              <Card key={item.id} item={item} isMyList={true} />
             ))}
           </Flex>
         </Box>
-        <Flex flex={2}></Flex>
+        <Flex flex={3} flexDir={"column"}>
+          <Flex justify="space-between" mt={20}>
+            <Heading>WishList</Heading>
+          </Flex>
+          <Flex gap={5} flexDir="column" mt={10}>
+            {wishlist.map((item) => (
+              <Card key={item.id} item={item} />
+            ))}
+          </Flex>
+        </Flex>
       </Flex>
 
       <Modal isOpen={isOpenCountry} onClose={onCloseCountry} isCentered>
@@ -652,6 +798,38 @@ const Profile = () => {
         onClose={() => setIsModalUkOpen(false)}
       />
 
+      <Modal isOpen={isErrorOpen} onClose={onErrorClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Error</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>{errorMessage}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onErrorClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isSuccessOpen} onClose={onSuccessClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Success</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Your post has been uploaded successfully!</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="green" mr={3} onClick={onSuccessClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -725,7 +903,7 @@ const Profile = () => {
           <ModalCloseButton size={"lg"} />
           <ModalBody p={6}>
             <Flex flexDir={["column", "row"]} gap={10}>
-              <Flex
+              {/* <Flex
                 flex={1}
                 align={"center"}
                 w={"100%"}
@@ -733,171 +911,171 @@ const Profile = () => {
                 justify={"center"}
                 flexDir={"column"}
                 gap={10}
-              >
-                <Image
+              > */}
+              {/* <Image
                   src="/public/hblogowh.jpeg"
                   alt="logo"
                   h={"200px"}
                   w={"200px"}
                 />
-                <Heading>WELCOME TO THE HOME BASKET</Heading>
-                <Flex flexDir={"column"} w={"100%"} gap={5}>
-                  <Heading size={"md"}>
-                    What are you interested in posting?
-                  </Heading>
+                <Heading>WELCOME TO THE HOME BASKET</Heading> */}
+              <Flex flexDir={"column"} w={"100%"} gap={5} flex={1}>
+                <Heading size={"md"}>
+                  What are you interested in posting?
+                </Heading>
 
-                  <Button
-                    backgroundColor={
-                      selectedItem == "sell" ? "#F6874F" : "#1A3D5C"
-                    }
-                    color="white"
-                    _hover={{ bg: "#F6874F", scale: 0.8 }}
-                    w={"100%"}
-                    p={"50px"}
-                    borderRadius={20}
-                    onClick={() => {
-                      setProperty((prevState) => ({
-                        ...prevState,
-                        postData: {
-                          ...prevState.postData,
-                          type: "sale",
-                        },
-                      }));
-                      setSelectedItem("sell");
-                      setPropertyList(proptypes["sell"]);
-                      setPropType("");
-                    }}
-                  >
-                    <Flex align={"center"} justify={"space-between"} w={"100%"}>
-                      <Text fontSize="30px" fontWeight={"600"}>
-                        Sell
-                      </Text>
-                      <FaPlusCircle color="#fff" fontSize={40} />
-                    </Flex>
-                  </Button>
-                  <Button
-                    backgroundColor={
-                      selectedItem == "rent" ? "#F6874F" : "#1A3D5C"
-                    }
-                    color="white"
-                    _hover={{ bg: "#F6874F", scale: 0.8 }}
-                    w={"100%"}
-                    p={"50px"}
-                    borderRadius={20}
-                    onClick={() => {
-                      setProperty((prevState) => ({
-                        ...prevState,
-                        postData: {
-                          ...prevState.postData,
-                          type: "rent",
-                        },
-                      }));
-                      setSelectedItem("rent");
-                      setPropertyList(proptypes["rent"]);
-                      setPropType("");
-                    }}
-                  >
-                    <Flex align={"center"} justify={"space-between"} w={"100%"}>
-                      <Text fontSize="30px" fontWeight={"600"}>
-                        Rent
-                      </Text>
-                      <BsFillHousesFill color="#fff" fontSize={40} />
-                    </Flex>
-                  </Button>
+                <Button
+                  backgroundColor={
+                    selectedItem == "sell" ? "#F6874F" : "#1A3D5C"
+                  }
+                  color="white"
+                  _hover={{ bg: "#F6874F", scale: 0.8 }}
+                  w={"100%"}
+                  p={"50px"}
+                  borderRadius={20}
+                  onClick={() => {
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        type: "sale",
+                      },
+                    }));
+                    setSelectedItem("sell");
+                    setPropertyList(proptypes["sell"]);
+                    setPropType("");
+                  }}
+                >
+                  <Flex align={"center"} justify={"space-between"} w={"100%"}>
+                    <Text fontSize="30px" fontWeight={"600"}>
+                      Sell
+                    </Text>
+                    <FaPlusCircle color="#fff" fontSize={40} />
+                  </Flex>
+                </Button>
+                <Button
+                  backgroundColor={
+                    selectedItem == "rent" ? "#F6874F" : "#1A3D5C"
+                  }
+                  color="white"
+                  _hover={{ bg: "#F6874F", scale: 0.8 }}
+                  w={"100%"}
+                  p={"50px"}
+                  borderRadius={20}
+                  onClick={() => {
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        type: "rent",
+                      },
+                    }));
+                    setSelectedItem("rent");
+                    setPropertyList(proptypes["rent"]);
+                    setPropType("");
+                  }}
+                >
+                  <Flex align={"center"} justify={"space-between"} w={"100%"}>
+                    <Text fontSize="30px" fontWeight={"600"}>
+                      Rent
+                    </Text>
+                    <BsFillHousesFill color="#fff" fontSize={40} />
+                  </Flex>
+                </Button>
 
-                  <Button
-                    backgroundColor={
-                      selectedItem == "shared" ? "#F6874F" : "#1A3D5C"
-                    }
-                    color="white"
-                    _hover={{ bg: "#F6874F", scale: 0.8 }}
-                    w={"100%"}
-                    p={"50px"}
-                    borderRadius={20}
-                    onClick={() => {
-                      setProperty((prevState) => ({
-                        ...prevState,
-                        postData: {
-                          ...prevState.postData,
-                          type: "shared",
-                        },
-                      }));
-                      setSelectedItem("shared");
-                      setPropertyList(proptypes["shared"]);
-                      setPropType("");
-                    }}
-                  >
-                    <Flex align={"center"} justify={"space-between"} w={"100%"}>
-                      <Text fontSize="30px" fontWeight={"600"}>
-                        Shared
-                      </Text>
-                      <BsFillPeopleFill color="#fff" fontSize={40} />
-                    </Flex>
-                  </Button>
+                <Button
+                  backgroundColor={
+                    selectedItem == "shared" ? "#F6874F" : "#1A3D5C"
+                  }
+                  color="white"
+                  _hover={{ bg: "#F6874F", scale: 0.8 }}
+                  w={"100%"}
+                  p={"50px"}
+                  borderRadius={20}
+                  onClick={() => {
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        type: "shared",
+                      },
+                    }));
+                    setSelectedItem("shared");
+                    setPropertyList(proptypes["shared"]);
+                    setPropType("");
+                  }}
+                >
+                  <Flex align={"center"} justify={"space-between"} w={"100%"}>
+                    <Text fontSize="30px" fontWeight={"600"}>
+                      Shared
+                    </Text>
+                    <BsFillPeopleFill color="#fff" fontSize={40} />
+                  </Flex>
+                </Button>
 
-                  <Button
-                    backgroundColor={
-                      selectedItem == "hotel" ? "#F6874F" : "#1A3D5C"
-                    }
-                    color="white"
-                    _hover={{ bg: "#F6874F", scale: 0.8 }}
-                    w={"100%"}
-                    p={"50px"}
-                    borderRadius={20}
-                    onClick={() => {
-                      setProperty((prevState) => ({
-                        ...prevState,
-                        postData: {
-                          ...prevState.postData,
-                          type: "hotel",
-                        },
-                      }));
-                      setSelectedItem("hotel");
-                      setPropertyList(proptypes["hotel"]);
-                      setPropType("");
-                    }}
-                  >
-                    <Flex align={"center"} justify={"space-between"} w={"100%"}>
-                      <Text fontSize="30px" fontWeight={"600"}>
-                        Hotel
-                      </Text>
+                <Button
+                  backgroundColor={
+                    selectedItem == "hotel" ? "#F6874F" : "#1A3D5C"
+                  }
+                  color="white"
+                  _hover={{ bg: "#F6874F", scale: 0.8 }}
+                  w={"100%"}
+                  p={"50px"}
+                  borderRadius={20}
+                  onClick={() => {
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        type: "hotel",
+                      },
+                    }));
+                    setSelectedItem("hotel");
+                    setPropertyList(proptypes["hotel"]);
+                    setPropType("");
+                  }}
+                >
+                  <Flex align={"center"} justify={"space-between"} w={"100%"}>
+                    <Text fontSize="30px" fontWeight={"600"}>
+                      Hotel
+                    </Text>
 
-                      <RiHotelFill color="#fff" fontSize={40} />
-                    </Flex>
-                  </Button>
-                  <Button
-                    backgroundColor={
-                      selectedItem == "distress" ? "#F6874F" : "#1A3D5C"
-                    }
-                    color="white"
-                    _hover={{ bg: "#F6874F", scale: 0.8 }}
-                    w={"100%"}
-                    // h={"80px"}
-                    p={"50px"}
-                    borderRadius={20}
-                    onClick={() => {
-                      setProperty((prevState) => ({
-                        ...prevState,
-                        postData: {
-                          ...prevState.postData,
-                          type: "distress",
-                        },
-                      }));
-                      setSelectedItem("distress");
-                      setPropertyList(proptypes["distress"]);
-                      setPropType("");
-                    }}
-                  >
-                    <Flex align={"center"} justify={"space-between"} w={"100%"}>
-                      <Text fontSize="30px" fontWeight={"600"}>
-                        Distress
-                      </Text>
+                    <RiHotelFill color="#fff" fontSize={40} />
+                  </Flex>
+                </Button>
+                <Button
+                  backgroundColor={
+                    selectedItem == "distress" ? "#F6874F" : "#1A3D5C"
+                  }
+                  color="white"
+                  _hover={{ bg: "#F6874F", scale: 0.8 }}
+                  w={"100%"}
+                  // h={"80px"}
+                  p={"50px"}
+                  borderRadius={20}
+                  onClick={() => {
+                    setProperty((prevState) => ({
+                      ...prevState,
+                      postData: {
+                        ...prevState.postData,
+                        type: "distress",
+                      },
+                    }));
+                    setSelectedItem("distress");
+                    setPropertyList(proptypes["distress"]);
+                    setPropType("");
+                  }}
+                >
+                  <Flex align={"center"} justify={"space-between"} w={"100%"}>
+                    <Text fontSize="30px" fontWeight={"600"}>
+                      Distress
+                    </Text>
 
-                      <GiFamilyHouse color="#fff" fontSize={40} />
-                    </Flex>
-                  </Button>
-                </Flex>
+                    <GiFamilyHouse color="#fff" fontSize={40} />
+                  </Flex>
+                </Button>
               </Flex>
+              {/* </Flex> */}
 
               {propType !== "" ? (
                 <Flex flex={1} flexDir={"column"} gap={10} p={[0, 10]}>
@@ -1054,6 +1232,7 @@ const Profile = () => {
                       </Menu>
                     </Box>
                   </Flex>
+
                   <Flex gap={10} flexDir={["column", "row"]} align={"center"}>
                     <FormControl>
                       <FormLabel>Property Size (in sqm)*</FormLabel>
@@ -1074,90 +1253,96 @@ const Profile = () => {
                         }
                       />
                     </FormControl>
-                    <FormControl>
-                      <FormLabel>Number of Bedrooms</FormLabel>
-                      <Input
-                        placeholder="Bedroom"
-                        value={property.bedroom}
-                        type="number"
-                        p={7}
-                        fontSize={20}
-                        onChange={(e) =>
-                          setProperty((prevState) => ({
-                            ...prevState,
-                            postData: {
-                              ...prevState.postData,
-                              bedroom: Number(e.target.value),
-                            },
-                          }))
-                        }
-                      />
-                    </FormControl>
-                    <FormControl>
-                      <FormLabel>Number of Bathrooms</FormLabel>
-                      <Input
-                        placeholder="Bathroom"
-                        value={property.bathroom}
-                        p={7}
-                        fontSize={20}
-                        onChange={(e) =>
-                          setProperty((prevState) => ({
-                            ...prevState,
-                            postData: {
-                              ...prevState.postData,
-                              bathroom: Number(e.target.value),
-                            },
-                          }))
-                        }
-                      />
-                    </FormControl>
-                    <FormControl>
-                      <FormLabel>Number of ParkingSpace</FormLabel>
-                      <Input
-                        placeholder="Parking Space"
-                        value={property.parking}
-                        p={7}
-                        fontSize={20}
-                        onChange={(e) => {
-                          // console.log(property);
-                          setProperty((prevState) => ({
-                            ...prevState,
-                            postData: {
-                              ...prevState.postData,
-                              parking: Number(e.target.value),
-                            },
-                          }));
-                        }}
-                      />
-                    </FormControl>
+                    {property.postData.property !== "land" && (
+                      <>
+                        <FormControl>
+                          <FormLabel>Number of Bedrooms</FormLabel>
+                          <Input
+                            placeholder="Bedroom"
+                            value={property.bedroom}
+                            type="number"
+                            p={7}
+                            fontSize={20}
+                            onChange={(e) =>
+                              setProperty((prevState) => ({
+                                ...prevState,
+                                postData: {
+                                  ...prevState.postData,
+                                  bedroom: Number(e.target.value),
+                                },
+                              }))
+                            }
+                          />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Number of Bathrooms</FormLabel>
+                          <Input
+                            placeholder="Bathroom"
+                            value={property.bathroom}
+                            p={7}
+                            fontSize={20}
+                            onChange={(e) =>
+                              setProperty((prevState) => ({
+                                ...prevState,
+                                postData: {
+                                  ...prevState.postData,
+                                  bathroom: Number(e.target.value),
+                                },
+                              }))
+                            }
+                          />
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Number of Parking Space</FormLabel>
+                          <Input
+                            placeholder="Parking Space"
+                            value={property.parking}
+                            p={7}
+                            fontSize={20}
+                            onChange={(e) => {
+                              setProperty((prevState) => ({
+                                ...prevState,
+                                postData: {
+                                  ...prevState.postData,
+                                  parking: Number(e.target.value),
+                                },
+                              }));
+                            }}
+                          />
+                        </FormControl>
+                      </>
+                    )}
                   </Flex>
+
                   <Flex gap={10} flexDir={["column", "row"]}>
-                    <Menu closeOnSelect={false}>
-                      <MenuButton
-                        as={Button}
-                        colorScheme={
-                          selectedFaciItems.length >= 1 ? "orange" : "gray"
-                        }
-                        flex={1}
-                        p={7}
-                        rightIcon={<ChevronDownIcon />}
-                      >
-                        Select Property Facilities
-                      </MenuButton>
-                      <MenuList minWidth="240px">
-                        <MenuOptionGroup
-                          title="Facilities"
-                          type="checkbox"
-                          onChange={handleMenuChange}
+                    {property.postData.property !== "land" && (
+                      <Menu closeOnSelect={false}>
+                        <MenuButton
+                          as={Button}
+                          colorScheme={
+                            selectedFaciItems.length >= 1 ? "orange" : "gray"
+                          }
+                          flex={1}
+                          p={7}
+                          rightIcon={<ChevronDownIcon />}
                         >
-                          {facilities.map((item, i) => (
-                            <MenuItemOption value={item} key={i}>
-                              {item}
-                            </MenuItemOption>
-                          ))}
-                        </MenuOptionGroup>
-                      </MenuList>
-                    </Menu>
+                          Select Property Facilities
+                        </MenuButton>
+                        <MenuList minWidth="240px">
+                          <MenuOptionGroup
+                            title="Facilities"
+                            type="checkbox"
+                            onChange={handleMenuChange}
+                          >
+                            {facilities.map((item, i) => (
+                              <MenuItemOption value={item} key={i}>
+                                {item}
+                              </MenuItemOption>
+                            ))}
+                          </MenuOptionGroup>
+                        </MenuList>
+                      </Menu>
+                    )}
                     <Menu>
                       <MenuButton
                         as={Button}
@@ -1196,60 +1381,120 @@ const Profile = () => {
                       </MenuList>
                     </Menu>
                   </Flex>
+                  {property.postData.property !== "land" && (
+                    <Flex gap={10} flexDir={["column", "row"]}>
+                      <Menu>
+                        <MenuButton
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                          flex={1}
+                          p={7}
+                        >
+                          Furnishing
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            onClick={() => handleSelectFur("furnished")}
+                          >
+                            Furnished
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => handleSelectFur("semi-furnished")}
+                          >
+                            Semi-Furnished
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => handleSelectFur("unfurnished")}
+                          >
+                            Unfurnished
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                      <Menu>
+                        <MenuButton
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                          flex={1}
+                          p={7}
+                        >
+                          Condition
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            onClick={() => handleSelectCon("Fairly Used")}
+                          >
+                            Fairly Used
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => handleSelectCon("Newly Built")}
+                          >
+                            Newly Built
+                          </MenuItem>
+                          <MenuItem onClick={() => handleSelectCon("Old")}>
+                            Old
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => handleSelectCon("Renovated")}
+                          >
+                            Renovated
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                      {property.postData.country !== "Nigeria" && (
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}
+                            flex={1}
+                            p={7}
+                          >
+                            Tax Band
+                          </MenuButton>
+                          <MenuList>
+                            {["A", "B", "C", "D", "E", "F", "G", "H", "I"].map(
+                              (band) => (
+                                <MenuItem
+                                  key={band}
+                                  onClick={() => handleSelectTaxBand(band)}
+                                >
+                                  {band}
+                                </MenuItem>
+                              )
+                            )}
+                          </MenuList>
+                        </Menu>
+                      )}
+                    </Flex>
+                  )}
+                  {property.postData.property !== "land" && (
+                    <Flex gap={10} flexDir={["column", "row"]}>
+                      {property.postData.country !== "Nigeria" && (
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}
+                            flex={1}
+                            p={7}
+                          >
+                            EPC Rating
+                          </MenuButton>
+                          <MenuList>
+                            {["A", "B", "C", "D", "E", "F", "G"].map(
+                              (rating) => (
+                                <MenuItem
+                                  key={rating}
+                                  onClick={() => handleSelectEpcRating(rating)}
+                                >
+                                  {rating}
+                                </MenuItem>
+                              )
+                            )}
+                          </MenuList>
+                        </Menu>
+                      )}
+                    </Flex>
+                  )}
                   <Flex gap={10} flexDir={["column", "row"]}>
-                    <Menu>
-                      <MenuButton
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                        flex={1}
-                        p={7}
-                      >
-                        Furnishing
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem onClick={() => handleSelectFur("furnished")}>
-                          Furnished
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handleSelectFur("semi-furnished")}
-                        >
-                          Semi-Furnished
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handleSelectFur("unfurnished")}
-                        >
-                          Unfurnished
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                    <Menu>
-                      <MenuButton
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                        flex={1}
-                        p={7}
-                      >
-                        Condition
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem
-                          onClick={() => handleSelectCon("Fairly Used")}
-                        >
-                          Fairly Used
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handleSelectCon("Newly Built")}
-                        >
-                          Newly Built
-                        </MenuItem>
-                        <MenuItem onClick={() => handleSelectCon("Old")}>
-                          Old
-                        </MenuItem>
-                        <MenuItem onClick={() => handleSelectCon("Renovated")}>
-                          Renovated
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
                     <Menu>
                       <MenuButton
                         as={Button}
@@ -1353,81 +1598,6 @@ const Profile = () => {
                       validateForm={() => validateForm()}
                     />
                   )}
-                  {/* <Flex gap={10} flexDir={["column", "row"]}>
-                    <Flex
-                      style={{
-                        width: "100%",
-                        borderRadius: 20,
-                        borderColor:
-                          // property.promotionType == "Premium"
-                          // ?
-                          "#F6874F",
-
-                        borderWidth: 1,
-                        padding: 20,
-                        justifyContent: "space-between",
-                        height: 120,
-                        marginTop: 15,
-                        flexDirection: "column",
-                      }}
-                      onClick={() => {
-                        setProperty((prevState) => ({
-                          ...prevState,
-                          postData: {
-                            ...prevState.postData,
-                            isPromoted: false,
-                            promotionType: "Premium",
-                          },
-                        }));
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: "#000",
-                          fontSize: 17,
-                          fontWeight: "600",
-                        }}
-                      >
-                        Premium
-                      </Text>
-                      <Flex
-                        style={{
-                          justifyContent: "space-between",
-                          width: "100%",
-                          alignItems: "center",
-                          flexDirection: "row",
-                          // backgroundColor: "red",
-                          // height:
-                        }}
-                      >
-                        <Flex
-                          style={{
-                            flexDirection: "row",
-                            gap: 10,
-                          }}
-                        >
-                          <Flex
-                            style={{
-                              backgroundColor: "#F6874F",
-                              padding: 10,
-                              // width: 100,
-                              alignItems: "center",
-                              justifyContent: "center",
-                              borderRadius: 20,
-                            }}
-                          >
-                            <Text
-                              style={{
-                                color: "#fff",
-                              }}
-                            >
-                              No Promotion
-                            </Text>
-                          </Flex>
-                        </Flex>
-                      </Flex>
-                    </Flex>
-                  </Flex> */}
                 </Flex>
               ) : (
                 <Flex flex={1} flexDir={"column"} gap={10} p={[0, 10]}>

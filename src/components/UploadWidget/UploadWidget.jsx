@@ -70,7 +70,10 @@ function UploadWidget({
   };
 
   return (
-    <CloudinaryScriptContext.Provider value={{ loaded }}>
+    <CloudinaryScriptContext.Provider
+      value={{ loaded }}
+      onClick={initializeCloudinaryWidget}
+    >
       <Flex
         backgroundColor="#F6874F"
         borderRadius={10}

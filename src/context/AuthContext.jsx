@@ -16,6 +16,7 @@ import {
   ModalOverlay,
   useDisclosure,
   Text,
+  Link,
 } from "@chakra-ui/react";
 import validate from "validate.js";
 import { LoadScript, Autocomplete } from "@react-google-maps/api";
@@ -71,6 +72,80 @@ export const AuthProvider = ({ children }) => {
   const handleClickConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
 
+  const [forgotPasswordPhoneNumber, setForgotPasswordPhoneNumber] =
+    useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const {
+    isOpen: isForgotPasswordOpen,
+    onOpen: onForgotPasswordOpen,
+    onClose: onForgotPasswordClose,
+  } = useDisclosure();
+  const {
+    isOpen: isResetPasswordOpen,
+    onOpen: onResetPasswordOpen,
+    onClose: onResetPasswordClose,
+  } = useDisclosure();
+
+  const handleForgotPassword = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/api/users/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phoneNumber: forgotPasswordPhoneNumber }),
+      });
+      const data = await response.json();
+      console.log("Forgot password response:", data);
+      if (data.success) {
+        alert(data.message);
+        onForgotPasswordClose();
+        onResetPasswordOpen(); // Open the reset password modal
+      } else {
+        alert(data.message || "Failed to process forgot password request");
+      }
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      alert(
+        "An error occurred while processing your request. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/api/users/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phoneNumber: forgotPasswordPhoneNumber,
+          code: resetCode,
+          newPassword: newPassword,
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert(data.message);
+        onResetPasswordClose();
+        onClose(); // Close the login modal
+      } else {
+        alert(data.message || "Failed to reset password");
+      }
+    } catch (error) {
+      console.error("Reset password error:", error);
+      alert("An error occurred while resetting password. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Fetch user data from local storage on mount
     const storedUser = localStorage.getItem("user");
@@ -107,6 +182,8 @@ export const AuthProvider = ({ children }) => {
       phoneNumber: "",
       negotiable: false,
       isPromoted: true,
+      epcRating: "A",
+      taxBand: "A",
     },
     postDetail: {
       desc: "Desc 1",
@@ -185,6 +262,7 @@ export const AuthProvider = ({ children }) => {
           // headers: headers,
         });
         const responseJson = await response.json();
+        console.log(responseJson);
         if (responseJson.success) {
           setPost(responseJson.data);
         } else {
@@ -382,35 +460,6 @@ export const AuthProvider = ({ children }) => {
     getLocation();
   }, []);
   //a function to forget password
-  const forgetPassword = () => {
-    if (!email) {
-      alert("Please enter your email address");
-      return;
-    }
-    setLoading(true);
-    fetch(`${BASE_URL}/api/auth/forget-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setLoading(false);
-        if (responseJson.success) {
-          alert("Password reset instructions have been sent to your email");
-          onClose();
-        } else {
-          alert(responseJson.message || "An error occurred");
-        }
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error("Forget password error:", error);
-        alert("An error occurred while processing your request");
-      });
-  };
 
   return (
     <AuthContext.Provider
@@ -468,10 +517,7 @@ export const AuthProvider = ({ children }) => {
                 ref={initialRef}
                 placeholder="Email"
                 value={email}
-                onChange={(e) => {
-                  console.log("Email input value:", e.target.value);
-                  setEmail(e.target.value);
-                }}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </FormControl>
 
@@ -484,6 +530,14 @@ export const AuthProvider = ({ children }) => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
+            <Link
+              color="blue.500"
+              onClick={onForgotPasswordOpen}
+              mt={2}
+              display="inline-block"
+            >
+              Forgot Password?
+            </Link>
           </ModalBody>
 
           <ModalFooter>
@@ -499,6 +553,82 @@ export const AuthProvider = ({ children }) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Modal
+        isOpen={isForgotPasswordOpen}
+        onClose={onForgotPasswordClose}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Forgot Password</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Phone Number</FormLabel>
+              <Input
+                placeholder="Enter your phone number"
+                value={forgotPasswordPhoneNumber}
+                onChange={(e) => setForgotPasswordPhoneNumber(e.target.value)}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleForgotPassword}
+              isLoading={loading}
+            >
+              Send Verification Code
+            </Button>
+            <Button onClick={onForgotPasswordClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={isResetPasswordOpen}
+        onClose={onResetPasswordClose}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Reset Password</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Verification Code</FormLabel>
+              <Input
+                placeholder="Enter the verification code"
+                value={resetCode}
+                onChange={(e) => setResetCode(e.target.value)}
+              />
+            </FormControl>
+            <FormControl mt={4}>
+              <FormLabel>New Password</FormLabel>
+              <Input
+                placeholder="Enter your new password"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleResetPassword}
+              isLoading={loading}
+            >
+              Reset Password
+            </Button>
+            <Button onClick={onResetPasswordClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Modal
         initialFocusRef={initialRegRef}
         finalFocusRef={finalRegRef}

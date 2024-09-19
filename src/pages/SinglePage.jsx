@@ -117,12 +117,14 @@ const SinglePage = () => {
               <Heading size={"md"}>Other Features</Heading>
               <Flex>
                 <Flex gap={1} flex={1} flexDir={"column"}>
-                  <Flex align={"center"} gap={1}>
-                    <Text color={"#999"} fontSize={"14"}>
-                      Furnishing:
-                    </Text>
-                    <Text color={"#000"}>{post.furnishing}</Text>
-                  </Flex>
+                  {post.property !== "land" && (
+                    <Flex align={"center"} gap={1}>
+                      <Text color={"#999"} fontSize={"14"}>
+                        Furnishing:
+                      </Text>
+                      <Text color={"#000"}>{post.furnishing}</Text>
+                    </Flex>
+                  )}
                   <Flex align={"center"} gap={1}>
                     <Text color={"#999"} fontSize={"14"}>
                       Property Size:
@@ -137,20 +139,40 @@ const SinglePage = () => {
                       {post?.postDetail?.charge ? "Yes" : "No"}
                     </Text>
                   </Flex>
+                  {post.country === "United Kingdom" && (
+                    <>
+                      <Flex align={"center"} gap={1}>
+                        <Text color={"#999"} fontSize={"14"}>
+                          EPC Rating:
+                        </Text>
+                        <Text color={"#000"}>{post.epcRating}</Text>
+                      </Flex>
+                      <Flex align={"center"} gap={1}>
+                        <Text color={"#999"} fontSize={"14"}>
+                          Tax Band:
+                        </Text>
+                        <Text color={"#000"}>{post.taxBand}</Text>
+                      </Flex>
+                    </>
+                  )}
                 </Flex>
                 <Flex gap={1} flex={1} flexDir={"column"}>
-                  <Flex align={"center"} gap={1}>
-                    <Text color={"#999"} fontSize={"14"}>
-                      Condition:
-                    </Text>
-                    <Text color={"#000"}>{post.condition}</Text>
-                  </Flex>
-                  <Flex align={"center"} gap={1}>
-                    <Text color={"#999"} fontSize={"14"}>
-                      Parking Space::
-                    </Text>
-                    <Text color={"#000"}>{post.parking}</Text>
-                  </Flex>
+                  {post.property !== "land" && (
+                    <>
+                      <Flex align={"center"} gap={1}>
+                        <Text color={"#999"} fontSize={"14"}>
+                          Condition:
+                        </Text>
+                        <Text color={"#000"}>{post.condition}</Text>
+                      </Flex>
+                      <Flex align={"center"} gap={1}>
+                        <Text color={"#999"} fontSize={"14"}>
+                          Parking Space:
+                        </Text>
+                        <Text color={"#000"}>{post.parking}</Text>
+                      </Flex>
+                    </>
+                  )}
                   <Flex align={"center"} gap={1}>
                     <Text color={"#999"} fontSize={"14"}>
                       Listed By:
@@ -160,31 +182,33 @@ const SinglePage = () => {
                 </Flex>
               </Flex>
             </Flex>
-            <Flex
-              flexDir={"column"}
-              gap={5}
-              bgColor={"#fff"}
-              p={3}
-              borderRadius={20}
-            >
-              <Heading size={"md"}>Facilities</Heading>
-              <Flex>
-                <Flex gap={1} flex={1} flexDir={"column"}>
-                  {firstHalf?.map((item, i) => (
-                    <Text color={"#999"} fontSize={"14"} key={i}>
-                      {item}
-                    </Text>
-                  ))}
-                </Flex>
-                <Flex gap={1} flex={1} flexDir={"column"}>
-                  {secondHalf?.map((item, i) => (
-                    <Text color={"#999"} fontSize={"14"} key={i}>
-                      {item}
-                    </Text>
-                  ))}
+            {post.property !== "land" && (
+              <Flex
+                flexDir={"column"}
+                gap={5}
+                bgColor={"#fff"}
+                p={3}
+                borderRadius={20}
+              >
+                <Heading size={"md"}>Facilities</Heading>
+                <Flex>
+                  <Flex gap={1} flex={1} flexDir={"column"}>
+                    {firstHalf?.map((item, i) => (
+                      <Text color={"#999"} fontSize={"14"} key={i}>
+                        {item}
+                      </Text>
+                    ))}
+                  </Flex>
+                  <Flex gap={1} flex={1} flexDir={"column"}>
+                    {secondHalf?.map((item, i) => (
+                      <Text color={"#999"} fontSize={"14"} key={i}>
+                        {item}
+                      </Text>
+                    ))}
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
+            )}
             <Flex
               flexDir={"column"}
               gap={5}
