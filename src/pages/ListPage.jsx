@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useCallback } from "react";
-import { Box, Flex, useMediaQuery } from "@chakra-ui/react";
+import { Box, Flex, useMediaQuery, Spinner } from "@chakra-ui/react";
 import Filter from "../components/filter/Filter";
 import Card from "../components/Card/Card";
 import Map from "../components/Map/Map";
@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
 
 const ListPage = () => {
-  const { fetchPosts, posts } = useContext(AuthContext);
+  const { fetchPosts, filteredPosts, posts, loading } = useContext(AuthContext);
   const [isDesktop] = useMediaQuery("(min-width: 1050px)");
   const location = useLocation();
 
@@ -20,6 +20,7 @@ const ListPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+
     const initialQuery = {
       type: params.get("type") || "",
       city: params.get("city") || "",
@@ -47,15 +48,23 @@ const ListPage = () => {
       >
         <Box flex={4}>
           <Filter onSearch={memoizedFetchPosts} />
-          <Flex gap={5} flexDir="column" mt={10}>
-            {posts.map((item) => (
-              <Card key={item._id} item={item} />
-            ))}
-          </Flex>
+          {loading ? (
+            <Flex justify="center" align="center" mt={10}>
+              <Spinner size="xl" />
+            </Flex>
+          ) : (
+            <Flex gap={5} flexDir="column" mt={10}>
+              {filteredPosts.length > 0
+                ? filteredPosts.map((item) => (
+                    <Card key={item._id} item={item} />
+                  ))
+                : posts.map((item) => <Card key={item._id} item={item} />)}
+            </Flex>
+          )}
         </Box>
         {isDesktop && (
           <Flex flex={2} pt={20} h={1000}>
-            <Map data={posts} />
+            <Map data={filteredPosts.length > 0 ? filteredPosts : posts} />
           </Flex>
         )}
       </Flex>

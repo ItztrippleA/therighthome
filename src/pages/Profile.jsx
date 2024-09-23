@@ -1440,60 +1440,73 @@ const Profile = () => {
                           </MenuItem>
                         </MenuList>
                       </Menu>
-                      {property.postData.country !== "Nigeria" && (
-                        <Menu>
-                          <MenuButton
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}
-                            flex={1}
-                            p={7}
-                          >
-                            Tax Band
-                          </MenuButton>
-                          <MenuList>
-                            {["A", "B", "C", "D", "E", "F", "G", "H", "I"].map(
-                              (band) => (
+                      {property.postData.country !== "Nigeria" &&
+                        property.postData.property !== "land" &&
+                        property.postData.property !== "hotel" && (
+                          <Menu>
+                            <MenuButton
+                              as={Button}
+                              rightIcon={<ChevronDownIcon />}
+                              flex={1}
+                              p={7}
+                            >
+                              Tax Band
+                            </MenuButton>
+                            <MenuList>
+                              {[
+                                "A",
+                                "B",
+                                "C",
+                                "D",
+                                "E",
+                                "F",
+                                "G",
+                                "H",
+                                "I",
+                              ].map((band) => (
                                 <MenuItem
                                   key={band}
                                   onClick={() => handleSelectTaxBand(band)}
                                 >
                                   {band}
                                 </MenuItem>
-                              )
-                            )}
-                          </MenuList>
-                        </Menu>
-                      )}
+                              ))}
+                            </MenuList>
+                          </Menu>
+                        )}
                     </Flex>
                   )}
-                  {property.postData.property !== "land" && (
-                    <Flex gap={10} flexDir={["column", "row"]}>
-                      {property.postData.country !== "Nigeria" && (
-                        <Menu>
-                          <MenuButton
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}
-                            flex={1}
-                            p={7}
-                          >
-                            EPC Rating
-                          </MenuButton>
-                          <MenuList>
-                            {["A", "B", "C", "D", "E", "F", "G"].map(
-                              (rating) => (
-                                <MenuItem
-                                  key={rating}
-                                  onClick={() => handleSelectEpcRating(rating)}
-                                >
-                                  {rating}
-                                </MenuItem>
-                              )
-                            )}
-                          </MenuList>
-                        </Menu>
-                      )}
-                    </Flex>
-                  )}
+                  {property.postData.property !== "land" &&
+                    property.postData.property !== "hotel" && (
+                      <Flex gap={10} flexDir={["column", "row"]}>
+                        {property.postData.country !== "Nigeria" && (
+                          <Menu>
+                            <MenuButton
+                              as={Button}
+                              rightIcon={<ChevronDownIcon />}
+                              flex={1}
+                              p={7}
+                            >
+                              EPC Rating
+                            </MenuButton>
+                            <MenuList>
+                              {["A", "B", "C", "D", "E", "F", "G"].map(
+                                (rating) => (
+                                  <MenuItem
+                                    key={rating}
+                                    onClick={() =>
+                                      handleSelectEpcRating(rating)
+                                    }
+                                  >
+                                    {rating}
+                                  </MenuItem>
+                                )
+                              )}
+                            </MenuList>
+                          </Menu>
+                        )}
+                      </Flex>
+                    )}
                   <Flex gap={10} flexDir={["column", "row"]}>
                     <Menu>
                       <MenuButton

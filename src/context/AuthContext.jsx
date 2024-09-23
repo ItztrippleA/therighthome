@@ -461,6 +461,31 @@ export const AuthProvider = ({ children }) => {
   }, []);
   //a function to forget password
 
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  // Add this new function
+  const filterPosts = useCallback(
+    (bathrooms, bedrooms, condition, facilities) => {
+      const filtered = posts.filter((post) => {
+        const bathroomMatch =
+          bathrooms === "" || post.bathroom >= parseInt(bathrooms);
+        const bedroomMatch =
+          bedrooms === "" || post.bedroom >= parseInt(bedrooms);
+        const conditionMatch = condition === "" || post.condition === condition;
+        const facilitiesMatch =
+          facilities.length === 0 ||
+          facilities.every((facility) =>
+            post.postDetail.facilities.includes(facility)
+          );
+        return (
+          bathroomMatch && bedroomMatch && conditionMatch && facilitiesMatch
+        );
+      });
+      setFilteredPosts(filtered);
+    },
+    [posts]
+  );
+
   return (
     <AuthContext.Provider
       value={{
@@ -497,6 +522,8 @@ export const AuthProvider = ({ children }) => {
         setQuery,
         intent,
         setIntent,
+        filteredPosts,
+        filterPosts,
       }}
     >
       <Modal

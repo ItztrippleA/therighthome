@@ -139,22 +139,24 @@ const SinglePage = () => {
                       {post?.postDetail?.charge ? "Yes" : "No"}
                     </Text>
                   </Flex>
-                  {post.country === "United Kingdom" && (
-                    <>
-                      <Flex align={"center"} gap={1}>
-                        <Text color={"#999"} fontSize={"14"}>
-                          EPC Rating:
-                        </Text>
-                        <Text color={"#000"}>{post.epcRating}</Text>
-                      </Flex>
-                      <Flex align={"center"} gap={1}>
-                        <Text color={"#999"} fontSize={"14"}>
-                          Tax Band:
-                        </Text>
-                        <Text color={"#000"}>{post.taxBand}</Text>
-                      </Flex>
-                    </>
-                  )}
+                  {post.country === "United Kingdom" &&
+                    post.property !== "land" &&
+                    post.property !== "hotel" && (
+                      <>
+                        <Flex align={"center"} gap={1}>
+                          <Text color={"#999"} fontSize={"14"}>
+                            EPC Rating:
+                          </Text>
+                          <Text color={"#000"}>{post.epcRating}</Text>
+                        </Flex>
+                        <Flex align={"center"} gap={1}>
+                          <Text color={"#999"} fontSize={"14"}>
+                            Tax Band:
+                          </Text>
+                          <Text color={"#000"}>{post.taxBand}</Text>
+                        </Flex>
+                      </>
+                    )}
                 </Flex>
                 <Flex gap={1} flex={1} flexDir={"column"}>
                   {post.property !== "land" && (
